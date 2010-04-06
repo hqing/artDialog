@@ -1,0 +1,94 @@
+@charset "utf-8";
+
+/*
+核心布局
+版本:	2010-04-02
+*/
+.ui_dialog { display:none; position:absolute; top:0; left:-999999em; _overflow:hidden; }
+.ui_dialog table { border:0; margin:0; border-collapse:collapse; }
+.ui_dialog td { padding:0; }
+.ui_title { position:relative; cursor:default; }
+.ui_title_icon { display:inline-block; *zoom:1; *display:inline; vertical-align:middle; }
+.ui_title_text { overflow:hidden; -moz-user-select:none; user-select:none; }
+.ui_close { display:block; position:absolute; outline:none; _font-size:0; _line-height:0; text-indent:-9999em; }
+.ui_content_wrap { height:auto; text-align:center; }
+.ui_content { margin:10px; position:relative; text-align:left; display: -moz-inline-stack; display:inline-block; *zoom:1; *display:inline; }/*文本智能对齐*/
+.ui_dialog_icon { display:inline-block; *zoom:1; *display:inline; vertical-align: middle; }
+.ui_content.ui_iframe { margin:0; *padding:0; display:block; height:100%; }
+.ui_iframe iframe { width:100%; height:100%; border:none; overflow:auto; }
+.ui_bottom { position:relative; }
+.ui_resize { position:absolute; right:0; bottom:0; z-index:1; cursor:nw-resize; _font-size:0px; }
+.ui_btns { text-align:right; white-space: nowrap; }
+.ui_btns span { margin:5px 10px; display:inline-block; *zoom:1; *display:inline; }
+.ui_btns button { cursor:pointer; }
+.ui_overlay div { height:100%; }
+.ui_overlay { display:none; position:absolute; top:0; left:0; width:100%; height:100%; filter:alpha(opacity=0); opacity:0; _overflow:hidden; }
+* html .ui_ie6_select_mask { width:99999999em; height:99999999em; position:absolute; top:0; left:0; z-index:-1; }/*解决IE6无法遮盖下拉控件*/
+/*对话框移动中*/
+.ui_move .ui_title_text { cursor:move; }
+/*静止定位*/
+html > body .ui_dialog_wrap.ui_fixed .ui_dialog { position:fixed; }
+* html .ui_dialog_wrap.ui_fixed .ui_dialog { fixed:true; }/*让JS获取*/
+* html.ui_ie6_fixed { background:url(*) fixed; }/*防止IE6动态修正TOP值时页面重新渲染而闪烁*/
+* html.ui_ie6_fixed body { height:100%; }/*防止IE6下对话框位置错误*/
+* html .ui_dialog_wrap.ui_fixed { width: 100%; height: 100%; position: absolute; left: expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); top: expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight);}/*IE6动态修正位置，模拟fixed*/
+/*锁屏*/
+html.ui_page_lock > body { overflow:hidden; }/*禁止滚动条*/
+* html.ui_page_lock { overflow:hidden; }
+html.ui_page_lock select { visibility:hidden; }/*隐藏select控件*/
+html.ui_page_lock > body .ui_dialog_wrap.ui_lock { width: 100%; height: 100%; position: fixed; top:0; left:0; }/*防止出现下面遮盖不全[不禁用滚动条需要加上这句]*/
+html.ui_page_lock _body { height:100%; _margin:0; }
+html.ui_page_lock _.ui_overlay { visibility:visible; }
+html.ui_page_lock _.ui_border { filter:alpha(opacity=30); opacity:0.3; }
+/*核心布局结束*/
+
+
+/*
+主题
+版本:	2010-04-02
+*/
+.ui_dialog { font-family:'微软雅黑'; }
+.ui_border { filter:alpha(opacity=30); opacity:0.3; }/*设置外边框透明度*/
+.ui_overlay div { height:100%; background:#000; filter:alpha(opacity=70); opacity:0.7; }/*设置遮罩颜色与透明度*/
+* html .ui_ie6_select_mask { display:none; }/*不在IE6强制遮盖下拉控件，因为要展现半透明边框*/
+.ui_dialog_main { background-color:#FFF; border:1px solid #4E84C0!important; }
+.ui_close, .r0d0, .r0d2, .r2d0, .r2d2 { width:10px; height:10px; background-image:url(./dialog.png); background-repeat:no-repeat; }
+.ui_title { height:100%; }
+.ui_title_text { height:30px; line-height:30px; padding:0 30px 0 10px; background-color:#214FA3; font-weight:700; color:#EBEBEB; }
+.ui_close { width:13px; height:13px; top:8px; right:8px; background-position:center center; }
+.ui_close:hover { background-color:#1D448C; }
+.ui_resize { width:8px; height:8px; }
+.ui_btns { background-color:#F9F9F9; }
+.ui_btns button { padding:5px 8px; border-color:#FFF #848484 #848484 #FFF; border-style:solid; border-width:1px; color:#000; line-height:1em; text-align:center; letter-spacing:2px; background-color:#F8F8F8; }
+.ui_btns .ui_yes button { background-color:#3A6EA5; color:#FFF; border-color:#84A6E6 #122B58 #122B58 #84A6E6; cursor:pointer; }
+.ui_btns .ui_yes:hover button { background-color:#2251A8; }
+.ui_border.r0d0 { background-position:left top; }
+.ui_border.r0d2 { background-position:right top; }
+.ui_border.r2d2 { background-position:right bottom; }
+.ui_border.r2d0 { background-position:left bottom; }
+.ui_border.r0d1, .ui_border.r1d2, .ui_border.r2d1, .ui_border.r1d0 { background-color:#000; }
+.ui_move .ui_title_text { color:#FFF; }
+.ui_move .ui_border { filter:alpha(opacity=40); opacity:0.4; }
+
+/*
+主题拓展参数[可添加组合在'style'参数中]
+*/
+
+/*图标*/
+.ui_dialog_icon {  }
+.alert .ui_dialog_icon { }/*警告消息*/
+.confirm .ui_dialog_icon {}/*询问消息*/
+.error .ui_dialog_icon {}/*错误消息*/
+.succeed .ui_dialog_icon {}/*成功消息*/
+/*直角边框*/
+.noRadius .ui_border { background:#000 none; }
+/*无外边框*/
+.noBorder .ui_border { display:none; }
+/*没有标题栏*/
+.noTitleBar .ui_title_wrap { height:0; _display:none; visibility:hidden; }
+/*无标题文字*/
+.noTitle .ui_title_text { visibility:hidden; height:15px; overflow:hidden; }
+.noTitle .ui_close { top:1px; right:1px; }
+.noTitle .ui_content { margin-top:0; }
+/*无关闭按钮*/
+.noClose .ui_close { display:none; }

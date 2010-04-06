@@ -1,0 +1,54 @@
+@charset "utf-8";
+/*
+*	artDialog框架兼容布局
+*	版本:1.0.3
+*
+*	www.planeArt.cn
+*	admin@planeArt.cn
+*/
+
+* html body { margin:0; }/*强制清空IE6下body默认边距,防止不兼容*/
+.ui_title_icon, .ui_content, .ui_dialog_icon, .ui_btns span { display:inline-block; *zoom:1; *display:inline; }/*inline-block元素合集*/
+.ui_dialog { display:none; position:absolute; top:0; left:-99999em; _overflow:hidden; }/*对话框初始状态不可见*/
+.ui_dialog table { border:0; margin:0; border-collapse:collapse; }
+.ui_dialog td { padding:0; }
+.ui_title { position:relative; }
+.ui_title_icon { vertical-align:middle; }/*标题图标与文本垂直对齐*/
+.ui_title_text { overflow:hidden; cursor:default; -moz-user-select:none; user-select:none; }
+.ui_close { display:block; position:absolute; outline:none; }
+.ui_content_wrap { height:auto; text-align:center; }/*文本智能对齐*/
+.ui_content { margin:10px; text-align:left; }/*文本智能对齐*/
+.ui_dialog_icon { vertical-align: middle; }/*对话框图标与文本居中垂直对齐*/
+.ui_content.ui_iframe { margin:0; *padding:0; display:block; height:100%; }/*如果包裹的是内部定义的嵌入式窗口则让自己有高度*/
+.ui_iframe iframe { width:100%; height:100%; border:none; overflow:auto; }/*继承父元素的100%高度和宽度*/
+.ui_bottom { position:relative; }
+.ui_resize { position:absolute; right:0; bottom:0; z-index:1; cursor:nw-resize; _font-size:0; }
+.ui_btns { text-align:right; white-space: nowrap; }
+.ui_btns span { margin:5px 10px; }
+.ui_btns button { cursor:pointer; }
+.ui_overlay { display:none; position:absolute; top:0; left:0; width:100%; height:100%; filter:alpha(opacity=0); opacity:0; _overflow:hidden; }/*遮罩外套，可供javascript执行透明渐变*/
+.ui_overlay div { height:100%; }/*遮罩背景层*/
+* html .ui_ie6_select_mask { width:99999em; height:99999em; position:absolute; top:0; left:0; z-index:-1; }/*强制覆盖IE6无法遮盖下拉控件(如果IE6 通过一些技巧应用了png图片，使用这个则会让png半透明失效,可在主题css文件中关闭:'display:none')*/
+
+/*
+移动对话框
+*/
+.ui_move .ui_title_text { cursor:move; }
+
+/*
+静止定位
+*/
+html > body .ui_dialog_wrap.ui_fixed .ui_dialog { position:fixed; }
+* html .ui_dialog_wrap.ui_fixed .ui_dialog { fixed:true; }/*静止定位记号,高度javascript IE6已经模拟了'position:fixed;'*/
+* html.ui_ie6_fixed { background:url(*) fixed; }/*防止IE6动态修正TOP值时页面重新渲染而闪烁*/
+* html.ui_ie6_fixed body { height:100%; }/*防止IE6下对话框位置错误*/
+* html .ui_dialog_wrap.ui_fixed { width: 100%; height: 100%; position: absolute; left: expression(documentElement.scrollLeft + documentElement.clientWidth - this.offsetWidth); top: expression(documentElement.scrollTop + documentElement.clientHeight - this.offsetHeight); }/*IE6动态修正位置，模拟fixed*/
+
+/*
+锁屏(javascript锁屏操作的同时也执行了静止定位)
+*/
+html.ui_page_lock > body { overflow:hidden; }/*禁止滚动条*/
+* html.ui_page_lock { overflow:hidden; }
+* html.ui_page_lock select, * html.ui_page_lock .ui_ie6_select_mask { visibility:hidden; }/*隐藏select控件,并且取消对话框强制覆盖select功能(防止圆角处显示白底)*/
+html.ui_page_lock > body .ui_dialog_wrap.ui_lock { width: 100%; height: 100%; position: fixed; top:0; left:0; }
+/*-----------------------artDialog框架兼容布局结束*/

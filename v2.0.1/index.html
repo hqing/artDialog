@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>artDialog demo</title>
+<link id="artDialogSkin" href="aero/aero.css" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="artDialog2.0.2.js"></script>
+<style type="text/css">
+html { height:100% }
+body { font:12px/1.5em "微软雅黑"; }
+a { color:#1E9300; }
+ul.nav { padding:0; margin:0; }
+ul.nav li { margin:5px 0; list-style:none; }
+pre { border-left:2px solid #A9EA1E; padding-left:8px; background:#FCFCFC; }
+pre code { color:#808080; background:#F7F7F7;  }
+#bg { display:none; width:100%; height:100%; overflow:hidden; position:fixed; top:0; left:0;z-index:10; }
+body.showBg { overflow:hidden; }
+body.showBg #bg { display:block;}
+#page { width:760px; margin:auto; }
+#page h1 { font-size:1.8em; color:#214FA3; font-weight:700; }
+#page h1 em { font-size:9px; color:#CCC;}
+#page fieldset { margin-top:10px; border:solid 1px #EBEBEB; }
+#page fieldset legend { padding:3px 20px; color:#FFF; background:#214FA3; font-size:1.4em; }
+#page li { line-height:1.8em; list-style: circle; margin:5px 0; color:#333; }
+#page fieldset, #page fieldset legend { -moz-border-radius:4px; -webkit-border-radius: 4px; border-radius:4px; }
+#page button { }
+#page .content { margin:0 20px; }
+#page .content h3 { color:#000; }
+#page .content ol, #page .content ul{ padding-left:0; margin-left:20px; }
+#page .api strong { width:5em; display:inline-block; *zoom:1;*display:inline;}
+#page .api li { border-bottom:1px dashed #CCC; margin:8px 0; }
+#page .tips { color:#DDD; }
+#page label { cursor:pointer; }
+#page .about { margin-top:30px; border-top:1px solid #F8F8F8; color:#666; }
+</style>
+<script type="text/javascript">
+/*演示脚本*/
+function showWin(){
+			artDialog({title:'功夫兔', content:'<object width="420" height="363"><param name="movie" value="http://www.tudou.com/v/bXwe7XgTxuA"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><param name="wmode" value="opaque"></param><embed src="http://www.tudou.com/v/bXwe7XgTxuA" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" wmode="opaque" width="420" height="363"></embed></object>', fixed:true});
+};
+function bgShow(){
+	var body = document.getElementsByTagName('body')[0];
+	if(body.className != 'showBg') {
+		body.className = 'showBg';
+		document.getElementById('bgCloseBtn').innerHTML = '关闭背景';
+	} else {
+		body.className = '';
+		document.getElementById('bgCloseBtn').innerHTML = '打开背景';
+	};
+};
+
+(function(){
+	var isIE6 = !+'\v1' && ([/MSIE (\d)\.0/i.exec(navigator.userAgent)][0][1] == 6);
+	var $ = function (id){
+		return 'string' == typeof id ? document.getElementById(id) : id;
+	};
+	var domReady = !+'\v1' ? function(f){(function(){
+			try{
+				document.documentElement.doScroll('left');
+			} catch (error){
+				setTimeout(arguments.callee, 0);
+				return;
+			};
+			f();
+		})();
+	} : function(f){
+		document.addEventListener('DOMContentLoaded', f, false);
+	};
+	
+	domReady(function(){
+		artDialog({content:'欢迎使用 "artDialog" 对话框组件！', fixed:true, lock:false,style:'succeed'}, function(){artDialog({title:' ', content:'谢谢观赏', lock:true})});
+		
+		if (!isIE6) {
+			function mySkin(s){
+				$('artDialogSkin').href = s;
+			};
+			$('skin_0').click();
+			$('skin_0').onclick = function(){
+				mySkin('aero/aero.css');
+			};
+			$('skin_1').onclick = function(){
+				mySkin('chrome/chrome.css');
+			};
+			$('skin_2').onclick = function(){
+				mySkin('facebook/facebook.css');
+			};
+			$('skin_3').onclick = function(){
+				mySkin('mini/mini.css');
+			};
+			$('skin_4').onclick = function(){
+				mySkin('aero/aero.css');
+				$('skin_0').click();
+				artDialog({content:'自己动手，丰衣足食', lock:true});
+			};
+			var s = true;
+			$('showBg').onclick = function(){
+				if (s) {
+					document.getElementsByTagName('body')[0].className = 'showBg';
+					artDialog({content:'<div id="topMenu" style="background:#000; width:200px; height:2em;line-height:2em;text-align:center; filter:alpha(opacity=70); opacity:0.7;">[<a href="#" style="color:#FFF" onclick="showWin();return false">打开新对话框</a>]&nbsp;&nbsp;[<a id="bgCloseBtn" href="#" style="color:#FFF" onclick="bgShow();return false">关闭</a>]</div>', x:'left', y:'top', style:'noSkin', fixed:true});
+					s = false;
+				} else {
+					bgShow();
+				};
+				return false;
+			};
+		};
+		
+
+		
+		//--------------------------
+		
+		$('btn1').onclick = function(){
+			artDialog({title:'图片查看', content:'<img width="817" height="479" src="http://www.hunanyishi.cn/images/main.jpg" />', fixed:true});
+			return false;
+		};
+		
+		$('btn2').onclick = function(){
+			artDialog({title:'google', url:'http://wap.google.com', width:240, height:320});
+			return false;
+		};
+		
+		$('btn3').onclick = function(){
+			artDialog({title:'功夫兔', content:'<object width="420" height="363"><param name="movie" value="http://www.tudou.com/v/bXwe7XgTxuA"></param><param name="allowFullScreen" value="true"></param><param name="allowscriptaccess" value="always"></param><param name="wmode" value="opaque"></param><embed src="http://www.tudou.com/v/bXwe7XgTxuA" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" wmode="opaque" width="420" height="363"></embed></object>', fixed:true});
+			return false;
+		};
+		
+		$('btn4').onclick = function(){
+			artDialog({content:'你人品稳定么？', fixed:true, yesText:'我很稳定', style:'confirm'}, function(){alert('你是好人');}, function(){alert('你是坏人');});
+			return false;
+		};
+		
+		$('btn5').onclick = function(){
+			artDialog({content:'你是坏人', style:'alert', lock:true}, function(){});
+			return false;
+		};
+		
+		$('btn6').onclick = function(e){
+			var e = e || window.event,
+			_x,
+			_y;
+			if(e.pageX || e.pageY){
+				_x = e.pageX;
+				_y = e.pageY;
+			} else {
+				_x = e.clientX + document.body.clientLeft;
+				_y = e.clientY + Math.max(document.body.scrollTop, document.documentElement.scrollTop);
+			};
+			var _this = this;
+			artDialog({content:'确认删除？',x:_x, y:_y, style:'noTitle noBorder'}, function(){_this.innerHTML = _this.innerHTML+ '[删除了]'});
+			return false;
+		};
+		
+		$('btn7').onclick = function(){
+			artDialog({content:'您收到 <strong>2</strong> 条消息', x:'right', y:'bottom', time:'100', fixed:true});
+			return false;
+		};
+		
+		//---------------------------
+
+		
+		var mailName = 'admin' + '@' + 'plane' + 'art' + '.cn';
+		$('myMail').innerHTML = mailName;
+	});
+
+})();
+</script>
+</head>
+<body>
+<div id="bg"><img src="demo/ggaojs29.jpg" /></div>
+<div id="page">
+  <h1>artDialog <em>v 2.0.2 Beta</em></h1>
+  <fieldset>
+    <legend>简介</legend>
+    <div class="content">
+      <p>artDialog是一个轻巧且高度兼容的javascript对话框组件，可让你的网页交互拥有桌面软件般的用户体验。</p>
+      <p>功能： 支持锁定屏幕(遮罩)、模拟alert和confirm、多窗口弹出、静止定位、支持Ese键关闭对话框、定时关闭、自定义位置、拖动、鼠标调节窗口大小、换肤……</p>
+      <h3>优点</h3>
+      <ol class="love">
+        <li>支持IE6和IE6+, Firefox, chrome, Opera, Safari</li>
+        <li>对话框自适应消息内容的大小<span class="tips">(包括按钮)</span>，并且支持消息框大小拖动调节</li>
+        <li>如果设置了对话框宽度，文本会自动居中或者居左对齐</li>
+        <li>如果定义的宽度高度小于内容大小对话框会自动伸展而不错位</li>
+        <li>轻量级，js核心压缩后不到8KB<span class="tips">(在js内嵌了核心兼容布局CSS的情况下)</span></li>
+        <li>基于table+DIV的九宫格布局，可方便定义皮肤。</li>
+        <li>支持 IE6 无抖动静止定位</li>
+        <li>支持 IE6 下覆盖下拉控件<span class="tips">(注:半透明皮肤不支持)</span></li>
+        <li>使用自定义坐标的时候智能修正位置，确保其在可视范围</li>
+        <li>拖动流畅，不会粘住鼠标也不会拖出浏览器视口导致无法控制</li>
+      </ol>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend id="d_api">接口</legend>
+    <div class="content">
+    <p>形式：artDialog({ 配置 }, function(){ 确定按钮回调函数 }, function(){ 取消按钮回调函数 }, function(){ 对话框关闭回调函数 })</p>
+<pre><code>artDialog({	
+    content:'欢迎你来到对话框世界！',
+      lock:true,
+      style:'succeed noClose'
+    }, function(){
+      alert('你点了确定');
+      }, function(){
+      alert('你点了取消');
+});</code></pre>
+    <ul class="api">
+      <li><strong>content</strong>: {消息内容,支持HTML}</li>
+      <li><strong>title</strong>: {标题.默认:'提示'}</li>
+      <li><strong>lock</strong>: {是否锁定屏幕. 默认:false}</li>
+      <li><strong>width</strong>: {宽度,支持em等单位. 默认:'auto'}</li>
+      <li><strong>height</strong>: {高度,支持em等单位. 默认:'auto'}</li>
+      <li><strong>url</strong>: {iframe地址,存在content参数时候,此参数无效}</li>
+      <li><strong>x</strong>: {x坐标,可以使用关键字,如:left/right/center. 默认:'center'}</li>
+      <li><strong>y</strong>: {y坐标,可以使用关键字,如:top/bottom/center. 默认:'center'(并非绝对垂直居中，而是使用的黄金比例)}</li>
+      <li><strong>fixed</strong>: {是否启用静止定位. 默认:false}</li>
+      <li><strong>time</strong>: {多少秒自动关闭}</li>
+      <li><strong>style</strong>: {对话框风格扩展参数,写入自定义className,详情见皮肤css文件的定义,多个用空格隔开}</li>
+      <li><strong>yesText</strong>: {确定按钮文本. 默认:'确定'}</li>
+      <li><strong>noText</strong>: {取消按钮文本. 默认:'取消'}</li>
+      <li><strong>yesClose</strong>: {点击确定按钮是否同时关闭对话框. 默认:true}</li>
+    </ul>
+    </div>
+  </fieldset>
+  <fieldset>
+    <legend id="d_demo">演示</legend>
+    <div class="content">
+    <ul>
+      <li>
+        <button id="btn1">图片</button>
+      </li>
+      <li>
+        <button id="btn2">外部页面</button>
+      </li>
+      <li>
+        <button id="btn3">动画</button>
+      </li>
+      <li>
+        <button id="btn4">询问</button>
+      </li>
+      <li>
+        <button id="btn5">警告</button>
+      </li>
+      <li>
+        <button id="btn6">快速菜单</button>
+      </li>
+      <li>
+        <button id="btn7">公告消息</button>
+      </li>
+    </ul>
+    <p> 
+    风格:<!--[if gte IE 7]><!-->
+      <label title="artDialog默认风格">
+        <input name="skin" type="radio" id="skin_0" value="1" checked="checked" />
+        aero</label>
+  
+      <label title="google chrome风格[支持IE6下覆盖下拉控件]">
+        <input type="radio" name="skin" value="2" id="skin_1" />
+        chrome</label>
+ 
+      <label title="sns风格">
+        <input type="radio" name="skin" value="3" id="skin_2" />
+        facebook</label>
+      <label title="无背景图片">
+        <input type="radio" name="skin" value="4" id="skin_3" />
+        mini</label>
+      <label>
+        <input type="radio" name="skin" value="5" id="skin_4" />
+        more..</label>
+        <div id="skinMenu">
+        	<a id="showBg" href="#">开启背景图片预览半透明效果</a>
+        </div>
+        <!--<![endif]--> 
+  <!--[if IE 6]>
+<a href="aero/index.html" target="_blank"l title="artDialog默认风格">aero</a> | <a href="chrome/index.html" target="_blank title="google chrome风格[支持IE6下覆盖下拉控件]"">chrome</a> | <a href="facebook/index.html" target="_blank" title="sns风格">facebook</a> | <a href="mini/index.html" target="_blank title="无背景图片"">mini</a>
+<![endif]-->
+    </p>
+    </div>
+  </fieldset>
+  
+  <fieldset>
+    <legend>作者</legend>
+    <div class="content">
+    	<p>artDialog 的设计目标是尽量用CSS与合理的XHTML架构解决复杂的兼容问题，提供更为简易的皮肤制作机制，通过切换皮肤以适应更多的交互界面，如下拉菜单、广告、照片幻灯、播放器等。</p>
+    	<p>artDialog2.0相对1.0版本有很大的提升，吸收了popbox、lhgdialog等组件的长处。</p>
+        <p>此版本是测试版，最后更新:2010-04-05。如果发现问题或者建议请给我发电子邮件，编写完善后将开源</p>
+   		<p class="about">唐斌, 长期关注于界面与用户体验，欢迎与我交流: <span id="myMail"></span>&nbsp;个人站点: <a href="http://www.planeArt.cn/" target="_blank">www.planeArt.cn</a></p>
+    </div>
+  </fieldset>
+  <a id="firebugLite" style="display:block;position:fixed;_position:absolute;z-index:2;top:5pt;right:15pt;width:38px;height:38px;text-indent:-99999em;overflow:hidden;text-align:left;border:2px solid #000;filter:alpha(opacity=60);opacity:0.6;background:url('http://getfirebug.com/releases/lite/1.2/firebug_logo.png') no-repeat 0 0;" href="#" onclick=" firebug=document.createElement('script');firebug.setAttribute('src','http://getfirebug.com/releases/lite/1.2/firebug-lite.js');document.body.appendChild(firebug);(function(){if(window.firebug.version){firebug.init();}else{setTimeout(arguments.callee);}})();void(firebug);this.style.display='none';return false" title="调试页面">firebug</a>
+</div>
+</body>
+</html>

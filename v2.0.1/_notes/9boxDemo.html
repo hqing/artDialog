@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>9box demo</title>
+<style type="text/css">
+table { border:none 0; border-top:#1D448C solid 1px; border-left:#1D448C solid 1px; border-collapse:collapse; }
+td { border-right:solid 1px #1D448C; border-bottom:solid 1px #1D448C; padding:5px; }
+</style>
+<script type="text/javascript">
+function start(){
+	var $ce = function (name){//生成xhtml节点
+		return document.createElement(name);
+	};
+	var $ctn = function (txt){//生成文本节点
+		return document.createTextNode(txt);
+	};
+	
+	var cTitleBar = $ce('td');//标题栏
+	var cTitle = $ce('div');//标题内容
+	var cClose = $ce('a');//关闭按钮
+	cTitleBar.className = 'cTitle';
+	cTitle.appendChild($ctn('标题'));//test
+	cClose.className ='cClose';
+	cClose.href = '#';
+	cClose.title = '关闭';
+	cClose.appendChild($ctn('关闭'));
+	cTitleBar.appendChild(cTitle);
+	cTitleBar.appendChild(cClose);
+	
+	var cContent = $ce('td');//内容区
+	var cContentWrap = $ce('div');//内容包裹
+	cContent.className = 'cContent';
+	cContentWrap.className = 'cContentWrap';
+	cContentWrap.appendChild($ctn('内容'));//test
+	cContent.appendChild(cContentWrap);
+	
+	var cBottom = $ce('td');//底部按钮区
+	cBottom.className = 'cBottom';
+	cBottom.appendChild($ctn('底部'));//test
+	
+	var cTable = $ce('table');//内容表格
+	var cTbody = $ce('tbody');
+	for(var r=0;r<3;r++){
+		_tr = $ce('tr');
+		if (r == 0) _tr.appendChild(cTitleBar);
+		if (r == 1) _tr.appendChild(cContent);
+		if (r == 2) _tr.appendChild(cBottom);
+		cTbody.appendChild(_tr);
+	};
+	cTable.appendChild(cTbody);
+	cTable.setAttribute('class', 'contentWrap');
+	
+	var bTable = $ce('table');//外边框表格
+	var bTbody = $ce('tbody');
+	bTable.className = 'artDialog';
+	for(var r=0;r<3;r++){
+		_tr = $ce('tr');
+		for(var d=0; d<3; d++){
+			_td = $ce('td');
+			if(r == 1 && d == 1) {
+				_td.appendChild(cTable);
+			}else{
+				_td.setAttribute('class', 'dBorder tr' +r+ 'td' +d);
+			}
+			_tr.appendChild(_td);
+		};
+		bTbody.appendChild(_tr);
+	};
+	bTable.appendChild(bTbody);
+	
+	var dOverlay = $ce('div');//遮罩
+	dOverlay.className = 'dOverlay';
+	dOverlay.appendChild($ce('div'));
+	
+	var dWrap = $ce('div');//外套
+	dWrap.className = 'dWrap';
+	dWrap.appendChild(dOverlay);
+	dWrap.appendChild(bTable);
+	
+	document.body.appendChild(dWrap);
+};
+</script>
+</head>
+<body onload="start()">
+<!--<div class="dialogWrap">
+  <div class="dialogOverlay">
+    <div></div>
+  </div>
+  <div class="dialog">
+    <table>
+      <tr>
+        <td class="D-TL">tl</td>
+        <td class="D-T">t</td>
+        <td class="D-TR">tr</td>
+      </tr>
+      <tr>
+        <td class="D-L" rowspan="3">l</td>
+        <td class="D-title">title</td>
+        <td class="D-R" rowspan="3">r</td>
+      </tr>
+      <tr>
+        <td class="D-content">content</td>
+      </tr>
+      <tr>
+        <td class="D-bottom">bottom</td>
+      </tr>
+      <tr>
+        <td class="D-BL">bl</td>
+        <td class="D-B">b</td>
+        <td class="D-BR">br</td>
+      </tr>
+    </table>
+  </div>
+</div>-->
+</body>
+</html>
