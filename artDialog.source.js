@@ -1993,10 +1993,9 @@ _use = function (event) {
 			
 			wrapStyle.width = 'auto';
 			style.width = Math.max(0, width) + 'px';
-			config.width = wrap[0].offsetWidth;
-			wrapStyle.width = config.width + 'px';
-			config.height = Math.max(0, height);
-			style.height = config.height + 'px';
+			wrapStyle.width = wrap[0].offsetWidth + 'px';
+			
+			style.height = Math.max(0, height) + 'px';
 			
 		} else {
 			var style = wrap[0].style,
