@@ -7,7 +7,7 @@
  * This is licensed under the GNU LGPL, version 2.1 or later.
  * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
  */
-
+ 
 ;(function ($, window, undefined) {
 
 $.noop = $.noop || function () {}; // jQuery 1.3.2
@@ -240,7 +240,7 @@ artDialog.fn = artDialog.prototype = {
 			oh = wrap.offsetHeight,
 			style = wrap.style;
 		
-		if (left !== undefined) {
+		if (left || left === 0) {
 			that._left = left.toString().indexOf('%') !== -1 ? left : null;
 			left = that._toNumber(left, ww - ow);
 			
@@ -253,7 +253,7 @@ artDialog.fn = artDialog.prototype = {
 			};
 		};
 		
-		if (top !== undefined) {
+		if (top || top === 0) {
 			that._top = top.toString().indexOf('%') !== -1 ? top : null;
 			
 			if (top === 'goldenRatio') {
