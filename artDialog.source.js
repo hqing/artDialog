@@ -1,6 +1,6 @@
 /*!
- * artDialog 4.1.1
- * Date: 2011-08-28 23:14
+ * artDialog 4.1.2
+ * Date: 2011-08-29 17:25
  * http://code.google.com/p/artdialog/
  * (c) 2009-2011 TangBin, http://www.planeArt.cn
  *
@@ -902,7 +902,7 @@ var artDialog = function (config, ok, cancel) {
 
 artDialog.fn = artDialog.prototype = {
 
-	version: '4.1.1',
+	version: '4.1.2',
 	
 	_init: function (config) {
 		var that = this, DOM,
@@ -910,11 +910,11 @@ artDialog.fn = artDialog.prototype = {
 			iconBg = icon && (_isIE6 ? {png: 'icons/' + icon + '.png'}
 			: {backgroundImage: 'url(\'' + config.path + '/skins/icons/' + icon + '.png\')'});
 		
+		that._isRun = true;
 		that.config = config;
-		that._listeners = {};
-		that._elemBack = that._timer = that._focus = that._isClose = that._lock = null;
+		that.DOM = DOM = that.DOM || that._getDOM();
 		
-		DOM = that.DOM = that.DOM || that._getDOM();
+		// 操作元素
 		DOM.wrap.addClass(config.skin);
 		DOM.close[config.cancel === false ? 'hide' : 'show']();
 		DOM.icon[0].style.display = icon ? '' : 'none';
@@ -923,10 +923,11 @@ artDialog.fn = artDialog.prototype = {
 		DOM.title.css('cursor', config.drag ? 'move' : 'auto');
 		DOM.content.css('padding', config.padding);
 		
-		that[config.show ? 'show' : 'hide'](false)
-		.button(config.button)
+		// 初始化方法
+		that[config.show ? 'show' : 'hide'](true)
+		that.button(config.button)
 		.title(config.title)
-		.content(config.content, false)
+		.content(config.content, true)
 		.size(config.width, config.height)
 		.time(config.time);
 		
@@ -963,7 +964,7 @@ artDialog.fn = artDialog.prototype = {
 			$content = DOM.content,
 			content = $content[0];
 		
-		that._elemBack = null;
+		that._elemBack && that._elemBack();
 		wrap.style.width = 'auto';
 		
 		if (msg === undefined) return content;
@@ -985,6 +986,7 @@ artDialog.fn = artDialog.prototype = {
 					parent.appendChild(msg);
 				};
 				msg.style.display = display;
+				that._elemBack = null;
 			};
 			
 			$content.html('');
@@ -994,7 +996,7 @@ artDialog.fn = artDialog.prototype = {
 		};
 		
 		// 新增内容后调整位置
-		if (arguments[1] !== false) {
+		if (!arguments[1]) {
 			if (that.config.follow) {
 				that.follow(that.config.follow);
 			} else {
@@ -1061,46 +1063,49 @@ artDialog.fn = artDialog.prototype = {
 			oh = wrap.offsetHeight,
 			style = wrap.style;
 		
-		if (!left && left !== 0) left = config.left;
-		if (!top && top !== 0) top = config.top;
-		config.left = left;
-		config.top = top;
-		
-		left = that._toNumber(left, ww - ow);
-		if (typeof left === 'number') left = ie6Fixed ? (left += docLeft) : left + dl;
-
-		if (top === 'goldenRatio') {
-			// 黄金比例垂直居中
-			top = (oh < 4 * wh / 7 ? wh * 0.382 - oh / 2 : (wh - oh) / 2) + dt;
-		} else {
-			top = that._toNumber(top, wh - oh);
-			if (typeof top === 'number') top = ie6Fixed ? (top += docTop) : top + dt;
-		};
-		//alert(top);
-		
-		if (typeof left === 'number') {
-			style.left = Math.max(left, dl) + 'px';
-		} else if (typeof left === 'string') {
-			style.left = left;
+		if (left !== undefined) {
+			that._left = left.toString().indexOf('%') !== -1 ? left : null;
+			left = that._toNumber(left, ww - ow);
+			
+			if (typeof left === 'number') left = ie6Fixed ? (left += docLeft) : left + dl;
+			
+			if (typeof left === 'number') {
+				style.left = Math.max(left, dl) + 'px';
+			} else if (typeof left === 'string') {
+				style.left = left;
+			};
 		};
 		
-		if (typeof top === 'number') {
-			style.top = Math.max(top, dt) + 'px';
-		} else if (typeof top === 'string') {
-			style.top = top;
+		if (top !== undefined) {
+			that._top = top.toString().indexOf('%') !== -1 ? top : null;
+			
+			if (top === 'goldenRatio') {
+				// 黄金比例垂直居中
+				top = (oh < 4 * wh / 7 ? wh * 0.382 - oh / 2 : (wh - oh) / 2) + dt;
+			} else {
+				top = that._toNumber(top, wh - oh);
+				if (typeof top === 'number') top = ie6Fixed ? (top += docTop) : top + dt;
+			};
+			
+			if (typeof top === 'number') {
+				style.top = Math.max(top, dt) + 'px';
+			} else if (typeof top === 'string') {
+				style.top = top;
+			};
 		};
 		
-		/*that.config.follow = null;*/
-		that._autoPositionType();
+		if (left !== undefined && top !== undefined) {
+			that._follow = null;
+			that._autoPositionType();
+		};
 		
 		return that;
 	},
-	
+
 	/**
 	 *	尺寸
 	 *	@param	{Number, String}	宽度
 	 *	@param	{Number, String}	高度
-	 *	@return	this
 	 */
 	size: function (width, height) {
 		var maxWidth, maxHeight, scaleWidth, scaleHeight,
@@ -1112,32 +1117,33 @@ artDialog.fn = artDialog.prototype = {
 			wrapStyle = wrap[0].style,
 			style = main[0].style;
 			
-		if (!width && width !== 0) width = config.width;
-		if (!height && height !== 0) height = config.height;
-				
-		maxWidth = _$window.width() - wrap[0].offsetWidth + main[0].offsetWidth;
-		scaleWidth = that._toNumber(width, maxWidth);
-		config.width = width;
-		width = scaleWidth;
-		
-		maxHeight = _$window.height() - wrap[0].offsetHeight + main[0].offsetHeight;
-		scaleHeight = that._toNumber(height, maxHeight);
-		config.height = height;
-		height = scaleHeight;
-		
-		if (typeof width === 'number') {
-			wrapStyle.width = 'auto';
-			style.width = Math.max(that.config.minWidth, width) + 'px';
-			wrapStyle.width = wrap[0].offsetWidth + 'px'; // 防止未定义宽度的表格遇到浏览器右边边界伸缩
-		} else if (typeof width === 'string') {
-			style.width = width;
-			width === 'auto' && wrap.css('width', 'auto');
+		if (width) {
+			that._width = width.toString().indexOf('%') !== -1 ? width : null;
+			maxWidth = _$window.width() - wrap[0].offsetWidth + main[0].offsetWidth;
+			scaleWidth = that._toNumber(width, maxWidth);
+			width = scaleWidth;
+			
+			if (typeof width === 'number') {
+				wrapStyle.width = 'auto';
+				style.width = Math.max(that.config.minWidth, width) + 'px';
+				wrapStyle.width = wrap[0].offsetWidth + 'px'; // 防止未定义宽度的表格遇到浏览器右边边界伸缩
+			} else if (typeof width === 'string') {
+				style.width = width;
+				width === 'auto' && wrap.css('width', 'auto');
+			};
 		};
 		
-		if (typeof height === 'number') {
-			style.height = Math.max(that.config.minHeight, height) + 'px';
-		} else if (typeof height === 'string') {
-			style.height = height;
+		if (height) {
+			that._height = height.toString().indexOf('%') !== -1 ? height : null;
+			maxHeight = _$window.height() - wrap[0].offsetHeight + main[0].offsetHeight;
+			scaleHeight = that._toNumber(height, maxHeight);
+			height = scaleHeight;
+			
+			if (typeof height === 'number') {
+				style.height = Math.max(that.config.minHeight, height) + 'px';
+			} else if (typeof height === 'string') {
+				style.height = height;
+			};
 		};
 		
 		that._ie6SelectFix();
@@ -1147,26 +1153,30 @@ artDialog.fn = artDialog.prototype = {
 	
 	/**
 	 * 跟随元素
-	 * @param	{HTMLElement}
+	 * @param	{HTMLElement, String}
 	 */
 	follow: function (elem) {
-		var $elem, that = this;
-
+		var $elem, that = this, config = that.config;
+		
 		if (typeof elem === 'string' || elem && elem.nodeType === 1) {
 			$elem = $(elem);
-		};
-		if (!$elem || $elem.css('display') === 'none') {
-			return that.position(that.config.left, that.config.top);
+			elem = $elem[0];
 		};
 		
-		var winWidth = _$window.width(),
+		// 隐藏元素不可用
+		if (!elem || !elem.offsetWidth && !elem.offsetHeight) {
+			return that.position(that._left, that._top);
+		};
+		
+		var expando = _expando + 'follow',
+			winWidth = _$window.width(),
 			winHeight = _$window.height(),
 			docLeft =  _$document.scrollLeft(),
 			docTop = _$document.scrollTop(),
 			offset = $elem.offset(),
-			width = $elem[0].offsetWidth,
-			height = $elem[0].offsetHeight,
-			isFixed = _isIE6 ? false : that.config.fixed,
+			width = elem.offsetWidth,
+			height = elem.offsetHeight,
+			isFixed = _isIE6 ? false : config.fixed,
 			left = isFixed ? offset.left - docLeft : offset.left,
 			top = isFixed ? offset.top - docTop : offset.top,
 			wrap = that.DOM.wrap[0],
@@ -1191,8 +1201,9 @@ artDialog.fn = artDialog.prototype = {
 		style.left = setLeft + 'px';
 		style.top = setTop + 'px';
 		
-		that.config.follow = elem;
-		$elem[0][_expando + 'follow'] = that.config.id;
+		that._follow && that._follow.removeAttribute(expando);
+		that._follow = elem;
+		elem[expando] = config.id;
 		that._autoPositionType();
 		return that;
 	},
@@ -1215,12 +1226,12 @@ artDialog.fn = artDialog.prototype = {
 			buttons = DOM.buttons,
 			elem = buttons[0],
 			strongButton = 'aui_state_highlight',
+			listeners = that._listeners = that._listeners || {},
 			list = $.isArray(ags[0]) ? ags[0] : [].slice.call(ags);
 		
 		if (ags[0] === undefined) return elem;
 		$.each(list, function (i, val) {
 			var name = val.name,
-				listeners = that._listeners,
 				isNewButton = !listeners[name],
 				button = !isNewButton ?
 					listeners[name].elem :
@@ -1254,19 +1265,21 @@ artDialog.fn = artDialog.prototype = {
 	/** 显示对话框 */
 	show: function () {
 		this.DOM.wrap.show();
-		arguments[0] === false && this._lockMaskWrap && this._lockMaskWrap.show();
+		!arguments[0] && this._lockMaskWrap && this._lockMaskWrap.show();
 		return this;
 	},
 	
 	/** 隐藏对话框 */
 	hide: function () {
 		this.DOM.wrap.hide();
-		arguments[0] === false && this._lockMaskWrap && this._lockMaskWrap.hide();
+		!arguments[0] && this._lockMaskWrap && this._lockMaskWrap.hide();
 		return this;
 	},
 	
 	/** 关闭对话框 */
 	close: function () {
+		if (!this._isRun) return this;
+		
 		var that = this,
 			DOM = that.DOM,
 			wrap = DOM.wrap,
@@ -1274,28 +1287,34 @@ artDialog.fn = artDialog.prototype = {
 			fn = that.config.close,
 			follow = that.config.follow;
 		
-		if (that._isClose) return that;
 		that.time();
 		if (typeof fn === 'function' && fn.call(that, window) === false) {
 			return that;
 		};
 		
 		that.unlock();
-		wrap[0].className = wrap[0].style.cssText = '';
 		
+		// 置空内容
 		that._elemBack && that._elemBack();
+		wrap[0].className = wrap[0].style.cssText = '';
 		DOM.title.html('');
 		DOM.content.html('');
 		DOM.buttons.html('');
 		
 		if (artDialog.focus === that) artDialog.focus = null;
-		if (follow) follow[_expando + 'follow'] = null;
+		if (follow) follow.removeAttribute(_expando + 'follow');
 		delete list[that.config.id];
-		that._isClose = true;
 		that._removeEvent();
 		that.hide(true)._setAbsolute();
 		
+		// 清空除this.DOM之外临时对象，恢复到初始状态，以便使用单例模式
+		for (var i in that) {
+			if (that.hasOwnProperty(i) && i !== 'DOM') delete that[i];
+		};
+		
+		// 移除HTMLElement或重用
 		_box ? wrap.remove() : _box = that;
+		
 		return that;
 	},
 	
@@ -1338,7 +1357,7 @@ artDialog.fn = artDialog.prototype = {
 		wrap.addClass('aui_state_focus');
 		
 		// 添加焦点
-		if (arguments[0] !== false) {
+		if (!arguments[0]) {
 			try {
 				elemFocus = that._focus && that._focus[0] || DOM.close[0];
 				elemFocus && elemFocus.focus();
@@ -1369,7 +1388,7 @@ artDialog.fn = artDialog.prototype = {
 				+ '.clientWidth);height:expression(' + domTxt + '.clientHeight)'
 			: '';
 		
-		that.focus(false);
+		that.focus(true);
 		wrap.addClass('aui_state_lock');
 		
 		lockMaskWrap[0].style.cssText = sizeCss + ';position:fixed;z-index:'
@@ -1434,8 +1453,8 @@ artDialog.fn = artDialog.prototype = {
 	},
 	
 	// 获取元素
-	_getDOM: function (wrap) {
-		wrap = document.createElement('div');
+	_getDOM: function () {	
+		var wrap = document.createElement('div');
 		wrap.style.cssText = 'position:absolute;left:0;top:0';
 		wrap.innerHTML = artDialog.templates;
 		document.body.appendChild(wrap);
@@ -1601,18 +1620,19 @@ artDialog.fn = artDialog.prototype = {
 			that = this,
 			config = that.config,
 			DOM = that.DOM,
+			isIE = 'all' in document,
 			winSize = _$window.width() * _$window.height();
 		
 		winResize = function () {
 			var newSize,
 				oldSize = winSize,
-				elem = config.follow,
-				width = config.width,
-				height = config.height,
-				left = config.left,
-				top = config.top;
+				elem = that._follow,
+				width = that._width,
+				height = that._height,
+				left = that._left,
+				top = that._top;
 			
-			if ('all' in document) {
+			if (isIE) {
 				// IE6~7 window.onresize bug
 				newSize = _$window.width() * _$window.height();
 				winSize = newSize;
@@ -1656,7 +1676,7 @@ artDialog.fn = artDialog.prototype = {
 			that._ie6SelectFix();
 		})
 		.bind('mousedown', function () {
-			that.focus(false);
+			that.focus(true);
 		});
 	},
 	
@@ -1752,57 +1772,58 @@ try {
 
 
 /** 模板 */
-artDialog.templates = [
-'<div class="aui_outer">',
-	'<table class="aui_border">',
-		'<tbody>',
-			'<tr>',
-				'<td class="aui_nw"></td>',
-				'<td class="aui_n"></td>',
-				'<td class="aui_ne"></td>',
-			'</tr>',
-			'<tr>',
-				'<td class="aui_w"></td>',
-				'<td class="aui_center">',
-					'<table class="aui_inner">',
-						'<tbody>',
-							'<tr>',
-								'<td colspan="2" class="aui_header">',
-									'<div class="aui_titleBar">',
-										'<div class="aui_title"></div>',
-										'<a class="aui_close" href="javascript:/*artDialog*/;">',
-											'\xd7',
-										'</a>',
-									'</div>',
-								'</td>',
-							'</tr>',
-							'<tr>',
-								'<td class="aui_icon">',
-									'<div class="aui_iconBg"></div>',
-								'</td>',
-								'<td class="aui_main">',
-									'<div class="aui_content"></div>',
-								'</td>',
-							'</tr>',
-							'<tr>',
-								'<td colspan="2" class="aui_footer">',
-									'<div class="aui_buttons"></div>',
-								'</td>',
-							'</tr>',
-						'</tbody>',
-					'</table>',
-				'</td>',
-				'<td class="aui_e"></td>',
-			'</tr>',
-			'<tr>',
-				'<td class="aui_sw"></td>',
-				'<td class="aui_s"></td>',
-				'<td class="aui_se"></td>',
-			'</tr>',
-		'</tbody>',
-	'</table>',
-'</div>'
-].join('');
+// 使用uglifyjs压缩能够预先处理"+"号以合并字符串
+// @see	http://marijnhaverbeke.nl/uglifyjs
+artDialog.templates = 
+'<div class="aui_outer">' +
+	'<table class="aui_border">' +
+		'<tbody>' +
+			'<tr>' +
+				'<td class="aui_nw"></td>' +
+				'<td class="aui_n"></td>' +
+				'<td class="aui_ne"></td>' +
+			'</tr>' +
+			'<tr>' +
+				'<td class="aui_w"></td>' +
+				'<td class="aui_center">' +
+					'<table class="aui_inner">' +
+						'<tbody>' +
+							'<tr>' +
+								'<td colspan="2" class="aui_header">' +
+									'<div class="aui_titleBar">' +
+										'<div class="aui_title"></div>' +
+										'<a class="aui_close" href="javascript:/*artDialog*/;">' +
+											'\xd7' +
+										'</a>' +
+									'</div>' +
+								'</td>' +
+							'</tr>' +
+							'<tr>' +
+								'<td class="aui_icon">' +
+									'<div class="aui_iconBg"></div>' +
+								'</td>' +
+								'<td class="aui_main">' +
+									'<div class="aui_content"></div>' +
+								'</td>' +
+							'</tr>' +
+							'<tr>' +
+								'<td colspan="2" class="aui_footer">' +
+									'<div class="aui_buttons"></div>' +
+								'</td>' +
+							'</tr>' +
+						'</tbody>' +
+					'</table>' +
+				'</td>' +
+				'<td class="aui_e"></td>' +
+			'</tr>' +
+			'<tr>' +
+				'<td class="aui_sw"></td>' +
+				'<td class="aui_s"></td>' +
+				'<td class="aui_se"></td>' +
+			'</tr>' +
+		'</tbody>' +
+	'</table>' +
+'</div>';
 
 
 
@@ -1982,8 +2003,10 @@ _use = function (event) {
 				left = x + startLeft,
 				top = y + startTop;
 
-			style.left = Math.max(limit.minX, Math.min(limit.maxX, left)) + 'px';
-			style.top = Math.max(limit.minY, Math.min(limit.maxY, top)) + 'px';
+			config.left = Math.max(limit.minX, Math.min(limit.maxX, left));
+			config.top = Math.max(limit.minY, Math.min(limit.maxY, top));
+			style.left = config.left + 'px';
+			style.top = config.top + 'px';
 		};
 			
 		clsSelect();

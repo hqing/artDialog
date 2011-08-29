@@ -1,6 +1,6 @@
-/*
+/*!
  * artDialog basic
- * Date: 2011-08-28 23:14
+ * Date: 2011-08-29 17:25
  * http://code.google.com/p/artdialog/
  * (c) 2009-2011 TangBin, http://www.planeArt.cn
  *
@@ -81,11 +81,11 @@ artDialog.fn = artDialog.prototype = {
 	_init: function (config) {
 		var that = this, DOM;
 		
+		that._isRun = true;
 		that.config = config;
-		that._listeners = {};
-		that._elemBack = that._timer = that._focus = that._isClose = that._lock = null;
+		that.DOM = DOM = that.DOM || that._getDOM();
 		
-		DOM = that.DOM = that.DOM || that._getDOM();
+		// 操作元素
 		DOM.wrap.addClass(config.skin);
 		DOM.wrap.css('position', config.fixed ? 'fixed' : 'absolute');
 		DOM.close[config.cancel === false ? 'hide' : 'show']();
@@ -93,7 +93,8 @@ artDialog.fn = artDialog.prototype = {
 		DOM.title.css('cursor', config.drag ? 'move' : 'auto');
 		DOM.content.css('padding', config.padding);
 		
-		that[config.show ? 'show' : 'hide'](false)
+		// 初始化方法
+		that[config.show ? 'show' : 'hide'](true)
 		.button(config.button)
 		.title(config.title)
 		.content(config.content)
@@ -125,7 +126,7 @@ artDialog.fn = artDialog.prototype = {
 			$content = that.DOM.content,
 			content = $content[0];
 		
-		that._elemBack = null;
+		that._elemBack && that._elemBack();
 
 		if (msg === undefined) return content;
 		if (typeof msg === 'string') {
@@ -146,6 +147,7 @@ artDialog.fn = artDialog.prototype = {
 					parent.appendChild(msg);
 				};
 				msg.style.display = display;
+				that._elemBack = null;
 			};
 			
 			$content.html('');
@@ -199,7 +201,6 @@ artDialog.fn = artDialog.prototype = {
 		style.left = Math.max(left, dl) + 'px';
 		style.top = Math.max(top, dt) + 'px';
 		
-		/*that.config.follow = null;*/
 		return that;
 	},
 	
@@ -225,23 +226,27 @@ artDialog.fn = artDialog.prototype = {
 	 * @param	{HTMLElement}
 	 */
 	follow: function (elem) {
-		var $elem, that = this;
+		var $elem, that = this, config = that.config;
 
 		if (typeof elem === 'string' || elem && elem.nodeType === 1) {
 			$elem = $(elem);
-		};
-		if (!$elem || $elem.css('display') === 'none') {
-			return that.position();
+			elem = $elem[0];
 		};
 		
-		var fixed = that.config.fixed,
+		// 隐藏元素不可用
+		if (!elem || !elem.offsetWidth && !elem.offsetHeight) {
+			return that.position(that._left, that._top);
+		};
+		
+		var fixed = config.fixed,
+			expando = _expando + 'follow',
 			winWidth = _$window.width(),
 			winHeight = _$window.height(),
 			docLeft =  _$document.scrollLeft(),
 			docTop = _$document.scrollTop(),
 			offset = $elem.offset(),
-			width = $elem[0].offsetWidth,
-			height = $elem[0].offsetHeight,
+			width = elem.offsetWidth,
+			height = elem.offsetHeight,
 			left = fixed ? offset.left - docLeft : offset.left,
 			top = fixed ? offset.top - docTop : offset.top,
 			wrap = that.DOM.wrap[0],
@@ -266,8 +271,9 @@ artDialog.fn = artDialog.prototype = {
 		style.left = setLeft + 'px';
 		style.top = setTop + 'px';
 		
-		that.config.follow = elem;
-		$elem[0][_expando + 'follow'] = that.config.id;
+		that._follow && that._follow.removeAttribute(expando);
+		that._follow = elem;
+		elem[expando] = config.id;
 		return that;
 	},
 	
@@ -289,12 +295,12 @@ artDialog.fn = artDialog.prototype = {
 			buttons = DOM.buttons,
 			elem = buttons[0],
 			strongButton = 'aui_state_highlight',
+			listeners = that._listeners = that._listeners || {},
 			list = $.isArray(ags[0]) ? ags[0] : [].slice.call(ags);
 		
 		if (ags[0] === undefined) return elem;
 		$.each(list, function (i, val) {
 			var name = val.name,
-				listeners = that._listeners,
 				isNewButton = !listeners[name],
 				button = !isNewButton ?
 					listeners[name].elem :
@@ -326,14 +332,14 @@ artDialog.fn = artDialog.prototype = {
 	/** 显示对话框 */
 	show: function () {
 		this.DOM.wrap.show();
-		arguments[0] && this._lockMaskWrap && this._lockMaskWrap.show();
+		!arguments[0] && this._lockMaskWrap && this._lockMaskWrap.show();
 		return this;
 	},
 	
 	/** 隐藏对话框 */
 	hide: function () {
 		this.DOM.wrap.hide();
-		arguments[0] && this._lockMaskWrap && this._lockMaskWrap.hide();
+		!arguments[0] && this._lockMaskWrap && this._lockMaskWrap.hide();
 		return this;
 	},
 	
@@ -353,20 +359,27 @@ artDialog.fn = artDialog.prototype = {
 		};
 		
 		that.unlock();
-		wrap[0].className = wrap[0].style.cssText = '';
 		
+		// 置空内容
 		that._elemBack && that._elemBack();
+		wrap[0].className = wrap[0].style.cssText = '';
 		DOM.title.html('');
 		DOM.content.html('');
 		DOM.buttons.html('');
 		
 		if (artDialog.focus === that) artDialog.focus = null;
-		if (follow) follow[_expando + 'follow'] = null;
+		if (follow) follow.removeAttribute(_expando + 'follow');
 		delete list[that.config.id];
 		that._isClose = true;
 		that._removeEvent();
 		that.hide(true);
 		
+		// 清空除this.DOM之外临时对象，恢复到初始状态，以便使用单例模式
+		for (var i in that) {
+			if (that.hasOwnProperty(i) && i !== 'DOM') delete that[i];
+		};
+		
+		// 移除HTMLElement或重用
 		_box ? wrap.remove() : _box = that;
 		return that;
 	},
@@ -410,7 +423,7 @@ artDialog.fn = artDialog.prototype = {
 		wrap.addClass('aui_state_focus');
 		
 		// 添加焦点
-		if (arguments[0] !== false) {
+		if (!arguments[0]) {
 			try {
 				elemFocus = that._focus && that._focus[0] || DOM.close[0];
 				elemFocus && elemFocus.focus();
@@ -436,7 +449,7 @@ artDialog.fn = artDialog.prototype = {
 			sizeCss = !_isFixed ? 'position:absolute;width:' + docWidth + 'px;height:' + docHeight
 				+ 'px' : 'position:fixed;width:100%;height:100%';
 		
-		that.focus(false);
+		that.focus(true);
 		wrap.addClass('aui_state_lock');
 		
 		lockMaskWrap[0].style.cssText = sizeCss + ';z-index:'
@@ -471,8 +484,8 @@ artDialog.fn = artDialog.prototype = {
 	},
 	
 	// 获取元素
-	_getDOM: function (wrap) {
-		wrap = document.createElement('div');
+	_getDOM: function () {
+		var wrap = document.createElement('div');
 		wrap.style.cssText = 'position:absolute;left:0;top:0';
 		wrap.innerHTML = artDialog.templates;
 		document.body.appendChild(wrap);
@@ -503,6 +516,7 @@ artDialog.fn = artDialog.prototype = {
 		var winResize, resizeTimer,
 			that = this,
 			DOM = that.DOM,
+			isIE = 'all' in document,
 			winSize = _$window.width() * _$window.height();
 		
 		winResize = function () {
@@ -510,13 +524,12 @@ artDialog.fn = artDialog.prototype = {
 				oldSize = winSize,
 				elem = that.config.follow;
 			
-			if ('all' in document) {
+			if (isIE) {
 				// IE6~7 window.onresize bug
 				newSize = _$window.width() * _$window.height();
 				winSize = newSize;
 				if (oldSize === newSize) return;
 			};
-			
 			
 			if (elem) {
 				that.follow(elem);
@@ -551,7 +564,7 @@ artDialog.fn = artDialog.prototype = {
 			};
 		})
 		.bind('mousedown', function () {
-			that.focus(false);
+			that.focus(true);
 		});
 	},
 	
@@ -604,54 +617,55 @@ _$document.bind('keydown', function (event) {
 
 
 /** 模板 */
-artDialog.templates = [
-'<div class="aui_outer">',
-	'<table class="aui_border">',
-		'<tbody>',
-			'<tr>',
-				'<td class="aui_nw"></td>',
-				'<td class="aui_n"></td>',
-				'<td class="aui_ne"></td>',
-			'</tr>',
-			'<tr>',
-				'<td class="aui_w"></td>',
-				'<td class="aui_center">',
-					'<table class="aui_inner">',
-						'<tbody>',
-							'<tr>',
-								'<td class="aui_header">',
-									'<div class="aui_titleBar">',
-										'<div class="aui_title"></div>',
-										'<a class="aui_close" href="javascript:/*artDialog*/;">',
-											'\xd7',
-										'</a>',
-									'</div>',
-								'</td>',
-							'</tr>',
-							'<tr>',
-								'<td class="aui_main">',
-									'<div class="aui_content"></div>',
-								'</td>',
-							'</tr>',
-							'<tr>',
-								'<td class="aui_footer">',
-									'<div class="aui_buttons"></div>',
-								'</td>',
-							'</tr>',
-						'</tbody>',
-					'</table>',
-				'</td>',
-				'<td class="aui_e"></td>',
-			'</tr>',
-			'<tr>',
-				'<td class="aui_sw"></td>',
-				'<td class="aui_s"></td>',
-				'<td class="aui_se"></td>',
-			'</tr>',
-		'</tbody>',
-	'</table>',
-'</div>'
-].join('');
+// 使用uglifyjs压缩能够预先处理"+"号以合并字符串
+// @see	http://marijnhaverbeke.nl/uglifyjs
+artDialog.templates = 
+'<div class="aui_outer">' +
+	'<table class="aui_border">' +
+		'<tbody>' +
+			'<tr>' +
+				'<td class="aui_nw"></td>' +
+				'<td class="aui_n"></td>' +
+				'<td class="aui_ne"></td>' +
+			'</tr>' +
+			'<tr>' +
+				'<td class="aui_w"></td>' +
+				'<td class="aui_center">' +
+					'<table class="aui_inner">' +
+						'<tbody>' +
+							'<tr>' +
+								'<td class="aui_header">' +
+									'<div class="aui_titleBar">' +
+										'<div class="aui_title"></div>' +
+										'<a class="aui_close" href="javascript:/*artDialog*/;">' +
+											'\xd7' +
+										'</a>' +
+									'</div>' +
+								'</td>' +
+							'</tr>' +
+							'<tr>' +
+								'<td class="aui_main">' +
+									'<div class="aui_content"></div>' +
+								'</td>' +
+							'</tr>' +
+							'<tr>' +
+								'<td class="aui_footer">' +
+									'<div class="aui_buttons"></div>' +
+								'</td>' +
+							'</tr>' +
+						'</tbody>' +
+					'</table>' +
+				'</td>' +
+				'<td class="aui_e"></td>' +
+			'</tr>' +
+			'<tr>' +
+				'<td class="aui_sw"></td>' +
+				'<td class="aui_s"></td>' +
+				'<td class="aui_se"></td>' +
+			'</tr>' +
+		'</tbody>' +
+	'</table>' +
+'</div>';
 
 
 

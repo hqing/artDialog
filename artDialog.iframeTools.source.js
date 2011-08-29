@@ -1,6 +1,6 @@
 /*!
  * artDialog iframeTools
- * Date: 2011-08-27 20:45
+ * Date: 2011-08-29 17:25
  * http://code.google.com/p/artdialog/
  * (c) 2009-2011 TangBin, http://www.planeArt.cn
  *
@@ -272,7 +272,7 @@ artDialog.close = function () {
 // 点击iframe内容切换叠加高度
 _top != window && $(document).bind('mousedown', function () {
 	var api = artDialog.open.api;
-	api && api.focus(false);
+	api && api.focus(true);
 });
 
 
