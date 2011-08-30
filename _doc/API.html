@@ -13,7 +13,7 @@
 		if (_jQuery) document.write('<scr'+'ipt src="../jquery-1.6.2.min.js"></sc'+'ript>');
 	};
 	
-	document.write('<scr'+'ipt src="../artDialog.source.js?skin=' + (_skin || 'default') +'"></sc'+'ript>');
+	document.write('<scr'+'ipt src="../artDialog.source.js#skin=' + (_skin || 'default') +'"></sc'+'ript>');
 	window._isDemoSkin = !!_skin;	
 })();
 </script>
@@ -48,9 +48,9 @@ hljs.initHighlightingOnLoad();
     <h2 id="options">文档</h2>
     <h3>应用到你的项目</h3>
     <p>在页面head引入artDialog，其中skin参数表示对话框使用的风格文件。</p>
-    <pre><code>&lt;script src="artDialog.js?skin=default"&gt;&lt;/script&gt;</code></pre>
+    <pre><code>&lt;script src="artDialog.js#skin=default"&gt;&lt;/script&gt;</code></pre>
     <p>如果项目采用jQuery作为框架，则引用jQuery artDialog版本：</p>
-    <pre><code>&lt;script src="jquery.artDialog.js?skin=default"&gt;&lt;/script&gt;</code></pre>
+    <pre><code>&lt;script src="jquery.artDialog.js#skin=default"&gt;&lt;/script&gt;</code></pre>
     <p>如果需要在iframe应用下提供 <a href="#plugin">更好的支持</a> ，需要加上：</p>
     <pre><code>&lt;script src="artDialog.iframeTools.js"&gt;&lt;/script&gt;</code></pre>
     <h2 id="options">配置参数</h2>

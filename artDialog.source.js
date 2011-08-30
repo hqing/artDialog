@@ -1067,9 +1067,8 @@ artDialog.fn = artDialog.prototype = {
 			that._left = left.toString().indexOf('%') !== -1 ? left : null;
 			left = that._toNumber(left, ww - ow);
 			
-			if (typeof left === 'number') left = ie6Fixed ? (left += docLeft) : left + dl;
-			
 			if (typeof left === 'number') {
+				left = ie6Fixed ? (left += docLeft) : left + dl;
 				style.left = Math.max(left, dl) + 'px';
 			} else if (typeof left === 'string') {
 				style.left = left;
@@ -1078,16 +1077,10 @@ artDialog.fn = artDialog.prototype = {
 		
 		if (top || top === 0) {
 			that._top = top.toString().indexOf('%') !== -1 ? top : null;
-			
-			if (top === 'goldenRatio') {
-				// 黄金比例垂直居中
-				top = (oh < 4 * wh / 7 ? wh * 0.382 - oh / 2 : (wh - oh) / 2) + dt;
-			} else {
-				top = that._toNumber(top, wh - oh);
-				if (typeof top === 'number') top = ie6Fixed ? (top += docTop) : top + dt;
-			};
+			top = that._toNumber(top, wh - oh);
 			
 			if (typeof top === 'number') {
+				top = ie6Fixed ? (top += docTop) : top + dt;
 				style.top = Math.max(top, dt) + 'px';
 			} else if (typeof top === 'string') {
 				style.top = top;
@@ -1742,8 +1735,7 @@ _path = window['_artDialog_path'] || (function (script, i, me) {
 
 
 
-
-// 无阻塞载入CSS (如"artDialog.js?skin=aero")
+// 无阻塞载入CSS (如"artDialog.js#skin=aero")
 _skin = _thisScript.src.split('skin=')[1];
 if (_skin) {
 	var link = document.createElement('link');
@@ -1860,7 +1852,7 @@ artDialog.defaults = {
 	duration: 300,				// 遮罩透明度渐变动画速度
 	fixed: false,				// 是否静止定位
 	left: '50%',				// X轴坐标
-	top: 'goldenRatio',			// Y轴坐标
+	top: '38.2%',				// Y轴坐标
 	zIndex: 1987,				// 对话框叠加高度值(重要：此值不能超过浏览器最大限制)
 	resize: true,				// 是否允许用户调节尺寸
 	drag: true					// 是否允许用户拖动位置

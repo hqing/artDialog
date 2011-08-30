@@ -920,7 +920,7 @@ _path = window['_artDialog_path'] || (function (script, i, me) {
 
 
 
-// 无阻塞载入CSS (如"artDialog.js?skin=aero")
+// 无阻塞载入CSS (如"artDialog.js#skin=aero")
 _skin = _thisScript.src.split('skin=')[1];
 if (_skin) {
 	var link = document.createElement('link');

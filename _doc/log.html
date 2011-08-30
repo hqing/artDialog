@@ -14,7 +14,7 @@
 		if (_jQuery) document.write('<scr'+'ipt src="../jquery-1.6.2.min.js"></sc'+'ript>');
 	};
 	
-	document.write('<scr'+'ipt src="../artDialog.source.js?skin=' + (_skin || 'default') +'"></sc'+'ript>');
+	document.write('<scr'+'ipt src="../artDialog.source.js#skin=' + (_skin || 'default') +'"></sc'+'ript>');
 	window._isDemoSkin = !!_skin;
 })();
 </script>
@@ -51,7 +51,8 @@ hljs.initHighlightingOnLoad();
     <p>
 	<dl>
 		<dt>4.1.2</dt>
-		<dd>修复浏览器窗口调节可能导致靠右边界的对话框变形问题</dd>
+		<dd>修复v4.0.5之后版本在浏览器窗口调节的时候可能出现对话框变形问题</dd>
+		<dd>top参数黄金比例不再采用单独的关键字，可使用'38.2%'表示</dd>
 	</dl>
     <dl>
     	<dt>4.1.1</dt>
@@ -137,7 +138,7 @@ hljs.initHighlightingOnLoad();
       <dd>配置参数全部为可选，如果没有content，它将出现loading动画</dd>
       <dd style="text-decoration:underline; font-weight:bold">left与top关键字用百分比代替，同时增加width与height传递百分比参数</dd>
       <dd>art.dialog.get(id) 变更为 art.dialog.list[id]</dd>
-      <dd>不再支持多皮肤共存,css文件默认不自动加载：需要引用样式文件或者写url参数artDialog.js?skin=aero</dd>
+      <dd>不再支持多皮肤共存,css文件默认不自动加载：需要引用样式文件或者写url参数artDialog.js#skin=aero</dd>
       <dd>不再支持页面未就绪弹出对话框, 而建议在jQuery(function () {/* [code..] */})中或者window.onload = function () {/*[code..]*/}调用</dd>
       <dd>不再支持iframe父子窗口自动注入artDialog文件：请给需要的框架页面引用artDialog.js</dd>
     </dl>
