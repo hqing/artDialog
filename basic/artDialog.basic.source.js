@@ -399,7 +399,6 @@ $.event = {
 	/** @inner 事件监听器 */
 	handler: function (cache) {
 		return function (event) {
-			// 使IE6/7/8事件回调函数第一参数接收Event对象
 			event = $.event.fix(event || window.event);
 			for (var i = 0, list = cache.listeners, fn; fn = list[i++];) {
 				if (fn.call(cache.elem, event) === false) {
@@ -624,7 +623,7 @@ artDialog.fn = artDialog.prototype = {
 		that._addEvent();
 		_box = null;
 		
-		config.init && config.init.call(that, window);
+		config.init && config.init.call(that);
 		return that;
 	},
 	
@@ -867,7 +866,7 @@ artDialog.fn = artDialog.prototype = {
 		
 		if (that._isClose) return that;
 		that.time();
-		if (typeof fn === 'function' && fn.call(that, window) === false) {
+		if (typeof fn === 'function' && fn.call(that) === false) {
 			return that;
 		};
 		

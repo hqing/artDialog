@@ -111,7 +111,7 @@ artDialog.fn = artDialog.prototype = {
 		that._addEvent();
 		_box = null;
 		
-		config.init && config.init.call(that, window);
+		config.init && config.init.call(that);
 		return that;
 	},
 	
@@ -354,7 +354,7 @@ artDialog.fn = artDialog.prototype = {
 		
 		if (that._isClose) return that;
 		that.time();
-		if (typeof fn === 'function' && fn.call(that, window) === false) {
+		if (typeof fn === 'function' && fn.call(that) === false) {
 			return that;
 		};
 		
