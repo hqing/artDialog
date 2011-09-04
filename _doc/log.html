@@ -14,11 +14,11 @@
 		if (_jQuery) document.write('<scr'+'ipt src="../jquery-1.6.2.min.js"></sc'+'ript>');
 	};
 	
-	document.write('<scr'+'ipt src="../artDialog.source.js#skin=' + (_skin || 'default') +'"></sc'+'ript>');
+	document.write('<scr'+'ipt src="../artDialog.source.js?skin=' + (_skin || 'default') +'"></sc'+'ript>');
 	window._isDemoSkin = !!_skin;
 })();
 </script>
-<script src="../artDialog.iframeTools.source.js"></script>
+
 <script src="demo.js"></script>
 <script src="highlight/highlight.pack.js"></script>
 <script src="highlight/languages/javascript.js"></script>
@@ -53,6 +53,7 @@ hljs.initHighlightingOnLoad();
 		<dt>4.1.2</dt>
 		<dd>修复v4.0.5之后版本在浏览器窗口调节的时候可能出现对话框变形问题</dd>
 		<dd>top参数黄金比例不再采用单独的关键字，可使用'38.2%'表示</dd>
+        <dd>更新无标题栏的样式</dd>
 	</dl>
     <dl>
     	<dt>4.1.1</dt>
@@ -60,7 +61,7 @@ hljs.initHighlightingOnLoad();
 		<dd>修复iframeTools open方法与jQuery 1.6.2不兼容问题</dd>
 		<dd>修复了使用uglifyjs压缩导致代码不兼容IE6的问题</dd>
 		<dd>新增了“black”、“green”皮肤。“simple”皮肤去掉了标题栏，原“gray”更名为“opera”</dd>
-        <dd>新增content控制接口写入消息后，让对话框以自身为中心放大的特性</dd>
+        <dd>新增content扩展方法写入消息后，让对话框以自身为中心放大的特性</dd>
 		<dd>iframeTools: 完善了art.dialog.top方法内部的判断</dd>
 		<dd>iframeTools: open方法在IE6下提高了获取iframe内部尺寸精确度</dd>
 		<dd>这些参数将逐步被新名词代替（推荐在4.1.1+版本使用新参数名）：yesFn&raquo;ok | noFn&raquo;cancel | closeFn&raquo;close | initFn&raquo;init | yesText&raquo;okVal | noText&raquo;cancelVal</dd>
@@ -108,7 +109,7 @@ hljs.initHighlightingOnLoad();
 	<dl>
 		<dt>4.0.1</dt>
 		<dd>iframeTools:  拖拽操作增加透明遮罩，防止鼠标指针落入框架而导致监听失败，提高拖拽流畅性</dd>
-		<dd>iframeTools:  对open方法增加一个私有的iframe控制接口，用来引用其创建的iframe对象</dd>
+		<dd>iframeTools:  对open方法增加一个私有的iframe扩展方法，用来引用其创建的iframe对象</dd>
 		<dd>新增点击内容部分也可以如点击标题一样置顶对话框的特性</dd>
 	</dl>
     <dl>
@@ -138,7 +139,7 @@ hljs.initHighlightingOnLoad();
       <dd>配置参数全部为可选，如果没有content，它将出现loading动画</dd>
       <dd style="text-decoration:underline; font-weight:bold">left与top关键字用百分比代替，同时增加width与height传递百分比参数</dd>
       <dd>art.dialog.get(id) 变更为 art.dialog.list[id]</dd>
-      <dd>不再支持多皮肤共存,css文件默认不自动加载：需要引用样式文件或者写url参数artDialog.js#skin=aero</dd>
+      <dd>不再支持多皮肤共存,css文件默认不自动加载：需要引用样式文件或者写url参数artDialog.js?skin=aero</dd>
       <dd>不再支持页面未就绪弹出对话框, 而建议在jQuery(function () {/* [code..] */})中或者window.onload = function () {/*[code..]*/}调用</dd>
       <dd>不再支持iframe父子窗口自动注入artDialog文件：请给需要的框架页面引用artDialog.js</dd>
     </dl>
@@ -190,7 +191,7 @@ hljs.initHighlightingOnLoad();
     <dl>
       <dt>2.0</dt>
       <dd>重写代码，支持多对话框共存</dd>
-      <dd>支持返回控制接口关闭对话框</dd>
+      <dd>支持返回扩展方法关闭对话框</dd>
       <dd>解决v1已知的一些BUG</dd>
     </dl>
     <dl>

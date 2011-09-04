@@ -11,8 +11,8 @@
 /* common start */
 body { _margin:0; _height:100%; /*IE6 BUG*/ }
 .aui_outer { text-align:left; }
-.aui_border, .aui_inner { border:0; margin:0; border-collapse:collapse; width:auto; }
-.aui_nw, .aui_n, .aui_ne, .aui_w, .aui_center, .aui_e, .aui_sw, .aui_s, .aui_se, .aui_header, .aui_tdIcon, .aui_main, .aui_footer { padding:0; }
+table.aui_border, table.aui_dialog { border:0; margin:0; border-collapse:collapse; width:auto; }
+.aui_nw, .aui_n, .aui_ne, .aui_w, .aui_c, .aui_e, .aui_sw, .aui_s, .aui_se, .aui_header, .aui_tdIcon, .aui_main, .aui_footer { padding:0; }
 .aui_header, .aui_buttons button { font: 12px/1.11 'Microsoft Yahei', Tahoma, Arial, Helvetica, STHeiti; _font-family:Tahoma,Arial,Helvetica,STHeiti; -o-font-family: Tahoma, Arial; }
 .aui_title { overflow:hidden; text-overflow: ellipsis; }
 .aui_state_noTitle .aui_title { display:none; }
@@ -37,7 +37,7 @@ button.aui_state_highlight:hover { color:#FFF; border-color:#3c5412; }
 button.aui_state_highlight:active { border-color:#3c5412; filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#98d237', endColorstr='#7cb61b'); background: linear-gradient(top, #98d237, #7cb61b); background: -moz-linear-gradient(top, #98d237, #7cb61b); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#98d237), to(#7cb61b)); }
 /* common end */
 
-.aui_inner { background-color:#f7f7f7; }
+.aui_inner { background:#f7f7f7; }
 .aui_titleBar { width:100%; height:0; position:relative; bottom:30px; _bottom:0; _margin-top:-30px; }
 .aui_title { height:29px; line-height:29px; padding:0 25px 0 0; _padding:0; text-indent:5px; color:#FFF; font-weight:700; text-shadow:-1px -1px 0 rgba(0, 50, 0, .7); }
 .aui_nw, .aui_ne, .aui_sw, .aui_se, .aui_n, .aui_s, .aui_close { background-image:url(green/bg.png); background-repeat:no-repeat; }
@@ -70,3 +70,10 @@ aui_icon, .aui_main { padding-top:3px; }
 	.aui_s { background-position: 0 -67px; }
 	.aui_w, .aui_e { background-image:url(green/bg_css3_2.png); }
 }
+.aui_state_noTitle .aui_nw, .aui_state_noTitle .aui_ne, .aui_state_noTitle .aui_sw, .aui_state_noTitle .aui_se { width:3px; height:3px; }
+.aui_state_noTitle .aui_inner { border:1px solid #666; background:#FFF; }
+.aui_state_noTitle .aui_outer { box-shadow:none; }
+.aui_state_noTitle .aui_nw, .aui_state_noTitle .aui_n, .aui_state_noTitle .aui_ne, .aui_state_noTitle .aui_w, .aui_state_noTitle .aui_e, .aui_state_noTitle .aui_sw, .aui_state_noTitle .aui_s, .aui_state_noTitle .aui_se { background:rgba(0, 0, 0, .05); background:#000\9!important; filter:alpha(opacity=5)!important; }
+.aui_state_noTitle .aui_titleBar { bottom:0; _bottom:0; _margin-top:0; }
+.aui_state_noTitle .aui_close { top:0; right:0; width:18px; height:18px; line-height:18px; text-align:center; text-indent:0; font-family: Helvetica, STHeiti; _font-family: '\u9ed1\u4f53', 'Book Antiqua', Palatino; font-size:18px; text-decoration:none; color:#214FA3; background:none; filter:!important; }
+.aui_state_noTitle .aui_close:hover, .aui_state_noTitle .aui_close:active { text-decoration:none; color:#900; }

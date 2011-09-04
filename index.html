@@ -16,11 +16,11 @@
 		if (_jQuery) document.write('<scr'+'ipt src="jquery-1.6.2.min.js"></sc'+'ript>');
 	};
 	
-	document.write('<scr'+'ipt src="artDialog.source.js#skin=' + (_skin || 'default') +'"></sc'+'ript>');
+	document.write('<scr'+'ipt src="artDialog.source.js?skin=' + (_skin || 'default') +'"></sc'+'ript>');
 	window._isDemoSkin = !!_skin;
 })();
 </script>
-<script src="./artDialog.iframeTools.source.js"></script>
+<script src="./plugins/iframeTools.source.js"></script>
 <script src="./_doc/demo.js"></script>
 <script src="./_doc/highlight/highlight.pack.js"></script>
 <script src="./_doc/highlight/languages/javascript.js"></script>
@@ -87,9 +87,9 @@ hljs.initHighlightingOnLoad();
       <button class="runCode" id="btn2" title="btn2" name="demoCode02">运行&raquo;</button>
     </p>
     <p>更多配置参数用法请查阅API文档： <a href="./_doc/API.html#options">./_doc/API.html#options</a></p>
-    <h3>三、控制接口</h3>
-    <p>需要对弹出后的对话框操作？artDialog简单实用的控制接口可以使这一切变得简单。</p>
-    <p>如在ajax异步操作中，我们可以先定义一个变量引用对话框返回的控制接口：</p>
+    <h3>三、扩展方法</h3>
+    <p>需要对弹出后的对话框操作？artDialog简单实用的扩展方法可以使这一切变得简单。</p>
+    <p>如在ajax异步操作中，我们可以先定义一个变量引用对话框返回的扩展方法：</p>
     <pre><code class=" javascript">var myDialog = art.dialog();// 初始化一个带有loading图标的空对话框
 jQuery.ajax({
 	url: 'http://web5.qq.com/content?id=1',
@@ -100,7 +100,7 @@ jQuery.ajax({
 </code></pre>
     <p>如果需要使用程序控制关闭，可以使用"close"方法关闭对话框：</p>
     <pre><code class=" javascript">myDialog.close();</code></pre>
-    <p>更多控制接口用法请查阅API文档： <a href="./_doc/API.html#API">./_doc/API.html#API</a></p>
+    <p>更多扩展方法用法请查阅API文档： <a href="./_doc/API.html#API">./_doc/API.html#API</a></p>
     <h2>插件：框架应用工具</h2>
     <p>artDialog针对CMS类的框架应用提供了专属插件，如穿越框架、iframe、AJAX、跨框架传值操作等。</p>
     <p>例： 使用open方法嵌入页面，并使用data方法在各个iframe间传递数据：</p>
@@ -118,7 +118,7 @@ art.dialog.open('./_doc/iframeA.html');
       <input id="demoInput04-3" title="demoInput04-3" type="text" value="精于心，简于形" style="padding:4px; width:16em; margin-right:10px" />
       <button class="runCode" name="demoCode04-3">运行&raquo;</button>
     </p>
-    <p>插件更多功能请查阅API文档： <a href="./_doc/API.html#plugin">./_doc/API.html#plugin</a></p>
+    <p>插件更多功能请查阅API文档： <a target="_blank" href="./iframeTop.html">./iframeTop.html</a></p>
     <h2>jQuery + artDialog</h2>
     <p>artDialog提供了一个jQuery版本，功能与标准版一致，调用只需要把art前缀改成jQuery的命名空间。</p>
     <pre><code class=" javascript">// 普通调用
@@ -133,7 +133,7 @@ $('#main .test').dialog({content: 'hello world'});</code></pre>
     <p>作者：糖饼<br />
       邮箱：<span id="myEmail"></span> <span style="color:#CCC">(恕不提供使用问题咨询，请认真阅读文档)</span><br />
       网站：<a href="http://www.planeart.cn" target="_blank">PlaneArt.Cn</a><br />
-      微博：<a href="http://t.qq.com/tangbin">t.qq.com/tangbin</a></p>
+      微博：<a href="http://t.qq.com/tangbin">tangbin</a>(腾讯) <a href="http://www.weibo.com/planeart">planeart</a>(新浪)</p>
     <h2>捐赠</h2>
     <p>artDialog就是你一直想要的对话框么？哇～那么我非常期待您能够热情的提供15元或者其他金额的捐赠鼓励～正如您支持其他开源项目一样。</p>
     <p><a href="http://www.alipay.com/" target="_blank"><img style="max-height:42px" src="./_doc/images/alipay.jpg" alt="支付宝" align="middle" /></a> 帐号：<span id="alipay"></span></p>
@@ -144,12 +144,12 @@ $('#main .test').dialog({content: 'hello world'});</code></pre>
   <div id="footer"></div>
 </div>
 <script>
-$(function($){
+(function(){
 	var myMail = 1987 + '.' + 'tangbin' + '@' + 'gmail.com';
 	myMail = '<a href="mailto:' + myMail + '">' + myMail + '</a>';
-	$('#alipay')[0].innerHTML = myMail;
-	$('#myEmail')[0].innerHTML = myMail;
-});
+	document.getElementById('alipay').innerHTML = myMail;
+	document.getElementById('myEmail').innerHTML = myMail;
+})();
 </script>
 <script>_isDemoSkin && window._demoSkin && _demoSkin();</script>
 </body>

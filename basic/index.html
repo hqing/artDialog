@@ -29,15 +29,17 @@ hljs.initHighlightingOnLoad();
 body { font-size:75%; color:#666; font-family:'Microsoft Yahei', Tahoma, Arial!important; font-family:'宋体', Tahoma, Arial; background:#FFF; }
 a { color:#214FA3; }
 a:hover { text-decoration:underline; }
+a:active { color: #C30; }
 button { white-space: nowrap; }
 #logo { padding:5px 10px 10px 10px; font-size:34px; font-family:'Constantia'; font-weight:bold; color:#0C3; text-shadow:2px 2px 0 rgba(0, 0, 0, .05); }
 #doc { height:100%; }
-#header, #main, #footer { margin:0 80px; }
+#header, #main, #footer { margin:0 120px; }
+html>body #nav { position:fixed; left:0; top:120px; z-index:3;  }
 #main { min-height:640px; padding:15px; position:relative; width:50em; font-size:1.16em; background:#FFF; }
 #main .mainWrap { min-height:500px; _height:500px; }
 #main button { font-size:12px; padding:2px 8px; background-color:#F8F8F8; border:solid 1px #CCC; -moz-border-radius: 5px; -webkit-border-radius: 5px; border-radius:5px; cursor:pointer; }
 #main button:hover { background: #F5F5F5; }
-h2 { color:#03C; }
+h2 { color:#03C;text-shadow:2px 2px 0 rgba(0, 0, 0, .05); }
 table.zebra, .zebra th, .zebra td { border-width: 1px; border-style: solid; margin: 0; font-family:'Microsoft Yahei', Tahoma, Arial!important; font-family:'宋体', Tahoma, Arial; }
 table.zebra { table-layout: fixed; width: 100%; margin-bottom: 6px; padding: 0 1px 1px 0; border-spacing: 0; border-collapse: separate; *border-collapse:collapse;
 border-color: #abb8ce; background: #EDEDED; }
@@ -52,6 +54,8 @@ border-color: #abb8ce; background: #EDEDED; }
 .zebra tr.odd td { background: #e6eef9; }
 .zebra br { margin-bottom:1.8em; }
 table.zebra .parameter, table.zebra .type, table.zebra .default { width:7em; }
+body,td,th { font-family: "Microsoft Yahei", Tahoma, Arial; }
+
 </style>
 </head>
 
@@ -59,15 +63,18 @@ table.zebra .parameter, table.zebra .type, table.zebra .default { width:7em; }
 <div id="doc">
   <div id="header">
     <h1 id="logo">artDialog&#8482; <span style="font-size:12px">basic</span></h1>
-    <p style="padding:0 15px">"artDialog basic" <a href="../index.html">artDialog</a> 的子项目；它只拥有核心功能，体积较小，可被客户端快速载入。
-    <div style="padding:0 15px">导航： <a href="#" id="nav-skin">皮肤</a> | <a id="opt" href="#options">配置参数</a> | <a href="#api">控制接口</a></div>
+    <p style="padding:0 15px">artDialog basic 是 <a href="http://code.google.com/p/artdialog">artDialog</a> 的基本版本，它体积非常小，可被客户端快速载入。</p>
+  <ol id="nav">
+    	<li><a href="#options">配置参数</a></li>
+        <li><a href="#api">扩展方法</a></li>
+        <li><a href="#demo-options">配置参数演示</a></li>
+        <li><a href="#demo-api">扩展方法演示</a></li>
+        <li><a href="#in">引入文件</a></li>
+    	<li><a href="#" id="nav-skin">{皮肤}</a></li>
+    </ol>
   </div>
   <div id="main">
-    <h2 id="start">1.应用到你的项目</h2>
-    <p>在页面head引入artDialog:</p>
-    <pre style="background-color: #F0F1F9;padding:5px;"><code>&lt;link href=&quot;artDialog/skins/default.css&quot; rel=&quot;stylesheet&quot; /&gt;
-&lt;script src="artDialog/basic/artDialog.basic.js"&gt;&lt;/script&gt;</code></pre>
-    <h2 id="options">2.配置参数</h2>
+    <h2 id="options">1.配置参数</h2>
     <table class="zebra">
       <colgroup>
       <col class="col1">
@@ -122,7 +129,7 @@ table.zebra .parameter, table.zebra .type, table.zebra .default { width:7em; }
           <td rowspan="2">null</td>
           <td rowspan="2">取消按钮回调函数。<br />
             函数如果返回false将阻止对话框关闭；函数this指针指向内部api；如果传入true表示只显示有关闭功能的按钮<br />
-            对话框标题栏的关闭按钮其实就是取消按钮，只不过视觉不同罢了，点击同样触发cancel事件</td>
+            【注意】对话框标题栏的关闭按钮其实就是取消按钮，只不过视觉不同罢了，点击同样触发cancel事件</td>
         </tr>
         <tr class="odd">
           <td>Boolean</td>
@@ -148,7 +155,7 @@ table.zebra .parameter, table.zebra .type, table.zebra .default { width:7em; }
             <div>name —— 按钮名称</div>
             <div>callback —— 按下后执行的函数</div>
             <div>focus —— 是否聚焦点</div>
-            <div>disabled —— 是否标记按钮为不可用状态（后续可使用控制接口让其恢复可用状态）</div>
+            <div>disabled —— 是否标记按钮为不可用状态（后续可使用扩展方法让其恢复可用状态）</div>
             <br />
             <div>示例：</div>
             参数如：[{name: '登录', callback: function () {}}, {name: '取消'}] 。注意点击按钮默认会触发按钮关闭动作，需要阻止触发关闭请让回调函数返回false</td>
@@ -245,7 +252,7 @@ table.zebra .parameter, table.zebra .type, table.zebra .default { width:7em; }
           <td rowspan="2">null</td>
           <td rowspan="2">设定对话框唯一标识。用途：<br />
             1、防止重复弹出<br />
-            2、可后续使用art.dialog.list[youID]获取控制接口</td>
+            2、可后续使用art.dialog.list[youID]获取扩展方法</td>
         </tr>
         <tr class="odd">
           <td>Number</td>
@@ -269,7 +276,7 @@ table.zebra .parameter, table.zebra .type, table.zebra .default { width:7em; }
           <td>Function</td>
           <td>null</td>
           <td>对话框关闭前执行的函数。函数如果返回false将阻止对话框关闭。<br />
-            请注意这不是关闭按钮的回调函数，无论何种方式关闭对话框，close都将执行。</td>
+            【注意】这不是关闭按钮的回调函数，无论何种方式关闭对话框，close都将执行。</td>
         </tr>
         <tr>
           <th><a href="#show">show</a></th>
@@ -279,15 +286,83 @@ table.zebra .parameter, table.zebra .type, table.zebra .default { width:7em; }
         </tr>
       </tbody>
     </table>
-    <p>配置全局默认设置:</p>
-    <pre><code class="javascript">(function (config) {
-    config['lock'] = true;
-    config['fixed'] = true;
-    config['okVal'] = 'yes';
-    config['cancelVal'] = 'no';
-    // [more..]
-})(art.dialog.defaults);
-</code></pre>
+
+    <h2 id="api">2.扩展方法</h2>
+    <table class="zebra">
+      <colgroup>
+      <col class="col1">
+      <col class="col2">
+      <col class="col3">
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="name">名称</th>
+          <th class="note" colspan="3">描述</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>close()</th>
+          <td colspan="3">关闭对话框</td>
+        </tr>
+        <tr class="odd">
+          <th>show()</th>
+          <td colspan="3">显示对话框</td>
+        </tr>
+        <tr>
+          <th>hide()</th>
+          <td colspan="3">隐藏对话框</td>
+        </tr>
+        <tr class="odd">
+          <th>title(value)</th>
+          <td colspan="3">写入标题，无参数则返回标题容器元素</td>
+        </tr>
+        <tr>
+          <th>content(value)</th>
+          <td colspan="3">向消息容器中写入内容。参数支持字符串、DOM对象，无参数则返回内容容器元素</td>
+        </tr>
+        <tr class="odd">
+          <th>button(arguments)</th>
+          <td colspan="3">插入一个自定义按钮。<br />
+            配置参数成员：
+            <div>name —— 按钮名称</div>
+            <div>callback —— 按下后执行的函数</div>
+            <div>focus —— 是否聚焦点</div>
+            <div>disabled —— 是否标记按钮为不可用状态（后续可使用扩展方法让其恢复可用状态）</div>
+            <br />
+            <div>示例：</div>
+            <pre><code class="javascript">button({
+    name: '登录',
+    focus: true,
+    callback: function () {}
+}, {
+    name: '取消'
+})</code></pre></td>
+        </tr>
+        <tr>
+          <th>follow(element)</th>
+          <td colspan="3">让对话框吸附到指定元素附近</td>
+        </tr>
+        <tr class="odd">
+          <th>size(width, height)</th>
+          <td colspan="3">重新设定对话框大小</td>
+        </tr>
+        <tr>
+          <th>lock()</th>
+          <td colspan="3">锁屏</td>
+        </tr>
+        <tr class="odd">
+          <th>unlock()</th>
+          <td colspan="3">解锁</td>
+        </tr>
+        <tr>
+          <th>time(value)</th>
+          <td colspan="3">定时关闭（单位秒）</td>
+        </tr>
+
+      </tbody>
+    </table>
+    <h2 id="demo-options">3.配置参数演示</h2>
     <h3 id="content">内容 [content]</h3>
     <h4>1. 传入字符串</h4>
     <div id="demoCode_content">
@@ -335,7 +410,7 @@ table.zebra .parameter, table.zebra .type, table.zebra .default { width:7em; }
       <button class="runCode" name="demoCode_yes_no">运行&raquo;</button>
     </p>
     <h3 id="button">自定义按钮 [button]</h3>
-    <p>备注：回调函数this指向扩展接口，如果返回false将阻止对话框关闭；button参数对应的控制接口名称也是"button"</p>
+    <p>备注：回调函数this指向扩展接口，如果返回false将阻止对话框关闭；button参数对应的扩展方法名称也是"button"</p>
     <div id="demoCode_button">
       <pre><code class="javascript">art.dialog({
     id: 'testID',
@@ -344,7 +419,9 @@ table.zebra .parameter, table.zebra .type, table.zebra .default { width:7em; }
         {
             name: '同意',
             callback: function () {
-                this.content('你同意了');
+                this
+                .content('你同意了')
+                .button({name: '无效按钮', disabled: false});
                 return false;
             },
             focus: true
@@ -432,7 +509,7 @@ art.dialog({id: 'testID'}).title('8888888888');
     <p class="buttons">
       <button class="runCode" id="followTestBtn" title="id=followTestBtn" name="demoCode_follow">运行&raquo;</button>
     </p>
-    <h4>2、使用简写形式 （已经绑定onclick事件，注意此返回值不再是对话框控制接口）</h4>
+    <h4>2、使用简写形式 （已经绑定onclick事件，注意此返回值不再是对话框扩展方法）</h4>
     <div id="demoCode_follow_fn">
       <pre><code class="javascript">art('#demoCode_follow_a').dialog({
 	content: '让对话框跟着某个元素，一个元素同时只能出现一个对话框'
@@ -445,7 +522,7 @@ art.dialog({id: 'testID'}).title('8888888888');
     <div id="demoCode_size">
       <pre><code class="javascript">art.dialog({
 	width: '20em',
-    height: 55,
+	height: 55,
 	content: '尺寸可以带单位'
 });</code></pre>
     </div>
@@ -462,86 +539,22 @@ art.dialog({id: 'testID'}).title('8888888888');
     <p class="buttons">
       <button class="runCode" name="demoCode_fixed">运行&raquo;</button>
     </p>
-    <h2 id="api">3.控制接口</h2>
-    <table class="zebra">
-      <colgroup>
-      <col class="col1">
-      <col class="col2">
-      <col class="col3">
-      </colgroup>
-      <thead>
-        <tr>
-          <th class="name">名称</th>
-          <th class="note" colspan="3">描述</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>close()</th>
-          <td colspan="3">关闭对话框</td>
-        </tr>
-        <tr class="odd">
-          <th>show()</th>
-          <td colspan="3">显示对话框</td>
-        </tr>
-        <tr>
-          <th>hide()</th>
-          <td colspan="3">隐藏对话框</td>
-        </tr>
-        <tr class="odd">
-          <th>title(value)</th>
-          <td colspan="3">写入标题，无参数则返回标题容器元素</td>
-        </tr>
-        <tr>
-          <th>content(value)</th>
-          <td colspan="3">向消息容器中写入内容。参数支持字符串、DOM对象，无参数则返回内容容器元素</td>
-        </tr>
-        <tr class="odd">
-          <th>button(arguments)</th>
-          <td colspan="3">插入一个自定义按钮。<br />
-            如：button({name: '登录', callback: function () {_form.submit();}) 更多用法请见范例文档</td>
-        </tr>
-        <tr>
-          <th>follow(element)</th>
-          <td colspan="3">让对话框吸附到指定元素附近</td>
-        </tr>
-        <tr class="odd">
-          <th>size(width, height)</th>
-          <td colspan="3">重新设定对话框大小</td>
-        </tr>
-        <tr>
-          <th>lock()</th>
-          <td colspan="3">锁屏</td>
-        </tr>
-        <tr class="odd">
-          <th>unlock()</th>
-          <td colspan="3">解锁</td>
-        </tr>
-        <tr>
-          <th>time(val)</th>
-          <td colspan="3">定时关闭（单位秒）</td>
-        </tr>
-
-      </tbody>
-    </table>
-    <p>备注：控制接口返回值都是this，因此你可以使用链式编程风格。</p>
-    <p>控制接口可以在对话框初始化后控制对话框，需要有一定的javascript基础，这里不做过多演示。</p>
-    <h3>演示一</h3>
-    <p>直接引用控制接口</p>
+	<h2 id="demo-api">4.扩展方法演示</h2>
+    <p>特别说明：扩展方法支持链式操作</p>
+    <h3>获取扩展方法一：直接引用返回</h3>
     <div id="demoCode_api_1">
       <pre><code class="javascript">var dialog = art.dialog({
 	title: '我是对话框',
-    content: '我是初始化的内容'
+	content: '我是初始化的内容'
 });
       
-dialog.content('对话框内容被控制接口改变了').title('提示');
+dialog.content('对话框内容被扩展方法改变了').title('提示');
       </code></pre>
     </div>
     <p class="buttons">
       <button class="runCode" name="demoCode_api_1">运行&raquo;</button>
     </p>
-    <h3>演示二</h3>
-    <p>通过ID获取控制接口</p>
+    <h3>获取扩展方法二：通过对话框ID</h3>
     <div id="demoCode_api_2">
       <pre><code class="javascript">art.dialog({
     id: 'KDf435',
@@ -549,24 +562,24 @@ dialog.content('对话框内容被控制接口改变了').title('提示');
     content: '我是初始化的内容'
 });
       
-art.dialog.list['KDf435'].content('对话框内容被控制接口改变了');
+art.dialog.list['KDf435'].content('对话框内容被扩展方法改变了');
       </code></pre>
     </div>
     <p class="buttons">
       <button class="runCode" name="demoCode_api_2">运行&raquo;</button>
     </p>
-    <h3>演示三</h3>
-    <p>在回调函数中使用this引用控制接口</p>
+
+    <h3>获取扩展方法三：回调函数中this</h3>
     <div id="demoCode_api_3">
       <pre><code class="javascript">art.dialog({
     title: '警告',
     content: '我是初始化的内容',
     ok: function () {
-    	this.content('你点了确定按钮').lock();
+        this.content('你点了确定按钮').lock();
         return false;
     },
     init: function () {
-    	this.content('对话框内容被控制接口改变了');
+        this.content('对话框内容被扩展方法改变了');
     }
 });
       </code></pre>
@@ -574,8 +587,7 @@ art.dialog.list['KDf435'].content('对话框内容被控制接口改变了');
     <p class="buttons">
       <button class="runCode" name="demoCode_api_3">运行&raquo;</button>
     </p>
-    <h3>演示四</h3>
-    <p>关闭页面所有对话框</p>
+    <h3>关闭页面所有对话框</h3>
     <div id="demoCode_api_4">
       <pre><code class="javascript">var list = art.dialog.list;
 for (var i in list) {
@@ -596,10 +608,13 @@ for (var i in list) {
     button: [{
     	name: '管理',
         callback: function () {
-            this.content('我更改了删除按钮').button({
+            this
+            .content('我更改了删除按钮')
+            .button({
                 name: '删除',
                 disabled: false
-            });
+            })
+            .lock();
             return false;
         },
         focus: true
@@ -610,7 +625,7 @@ dialog.button(
     {
         name: '删除',
         callback: function () {
-            alert('remove')
+            alert('delect')
         },
         disabled: true
     }
@@ -620,7 +635,30 @@ dialog.button(
     <p class="buttons">
       <button class="runCode" name="demoCode_api_button">运行&raquo;</button>
     </p>
-    <h3>改变关闭方式</h3>
+    <h3>标题倒计时</h3>
+    <div id="demoCode_api_title">
+      <pre><code class="javascript">var timer;
+art.dialog({
+	content: '时间越来越少，越来越少..',
+	init: function () {
+    	var that = this, i = 5;
+        var fn = function () {
+            that.title(i + '秒后关闭');
+            !i && that.close();
+            i --;
+        };
+		timer = setInterval(fn, 1000);
+        fn();
+	},
+    close: function () {
+    	clearInterval(timer);
+    }
+}).show();</code></pre>
+    </div>
+    <p class="buttons">
+      <button class="runCode" name="demoCode_api_title">运行&raquo;</button>
+    </p>
+    <h3>关闭不删除内容</h3>
     <div id="demoCode_api_fn">
       <pre><code class="javascript">art.dialog({
 	id: 'show-hide',
@@ -634,6 +672,19 @@ dialog.button(
     <p class="buttons">
       <button class="runCode" name="demoCode_api_fn">运行&raquo;</button>
     </p>
+    <h2 id="in">5.应用到你的项目</h2>
+    <p>在页面head引入artDialog皮肤与程序文件:</p>
+    <pre style="background-color: #F0F1F9;padding:5px;border-radius:5px;"><code>&lt;link href=&quot;artDialog/skins/default.css&quot; rel=&quot;stylesheet&quot; /&gt;
+&lt;script src="artDialog/artDialog.basic.js"&gt;&lt;/script&gt;</code></pre>
+    <p>配置全局默认参数(可选):</p>
+    <pre><code class="javascript">(function (config) {
+    config['lock'] = true;
+    config['fixed'] = true;
+    config['okVal'] = 'Ok';
+    config['cancelVal'] = 'Cancel';
+    // [more..]
+})(art.dialog.defaults);
+</code></pre>
   </div>
   <div id="footer" style="position:fixed;bottom:0;right:0;text-align:right"><a href="#header">返回页头</a></div>
 </div>

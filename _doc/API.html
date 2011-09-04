@@ -13,11 +13,11 @@
 		if (_jQuery) document.write('<scr'+'ipt src="../jquery-1.6.2.min.js"></sc'+'ript>');
 	};
 	
-	document.write('<scr'+'ipt src="../artDialog.source.js#skin=' + (_skin || 'default') +'"></sc'+'ript>');
+	document.write('<scr'+'ipt src="../artDialog.source.js?skin=' + (_skin || 'default') +'"></sc'+'ript>');
 	window._isDemoSkin = !!_skin;	
 })();
 </script>
-<script src="../artDialog.iframeTools.source.js"></script>
+
 <script src="demo.js"></script>
 <script src="highlight/highlight.pack.js"></script>
 <script src="highlight/languages/javascript.js"></script>
@@ -45,14 +45,7 @@ hljs.initHighlightingOnLoad();
     </ul>
   </div>
   <div id="main">
-    <h2 id="options">文档</h2>
-    <h3>应用到你的项目</h3>
-    <p>在页面head引入artDialog，其中skin参数表示对话框使用的风格文件。</p>
-    <pre><code>&lt;script src="artDialog.js#skin=default"&gt;&lt;/script&gt;</code></pre>
-    <p>如果项目采用jQuery作为框架，则引用jQuery artDialog版本：</p>
-    <pre><code>&lt;script src="jquery.artDialog.js#skin=default"&gt;&lt;/script&gt;</code></pre>
-    <p>如果需要在iframe应用下提供 <a href="#plugin">更好的支持</a> ，需要加上：</p>
-    <pre><code>&lt;script src="artDialog.iframeTools.js"&gt;&lt;/script&gt;</code></pre>
+
     <h2 id="options">配置参数</h2>
     <table class="zebra">
       <colgroup>
@@ -135,7 +128,7 @@ hljs.initHighlightingOnLoad();
             <div>name —— 按钮名称</div>
             <div>callback —— 按下后执行的函数</div>
             <div>focus —— 是否聚焦点</div>
-            <div>disabled —— 是否标记按钮为不可用状态（后续可使用控制接口让其恢复可用状态）</div>
+            <div>disabled —— 是否标记按钮为不可用状态（后续可使用扩展方法让其恢复可用状态）</div>
             <br />
             <div>示例：</div>
             参数如：[{name: '登录', callback: function () {}}, {name: '取消'}] 。注意点击按钮默认会触发按钮关闭动作，需要阻止触发关闭请让回调函数返回false</td>
@@ -272,7 +265,7 @@ hljs.initHighlightingOnLoad();
           <td rowspan="2">null</td>
           <td rowspan="2">设定对话框唯一标识。用途：<br />
             1、防止重复弹出<br />
-            2、定义id后可以使用art.dialog.list[youID]获取控制接口</td>
+            2、定义id后可以使用art.dialog.list[youID]获取扩展方法</td>
         </tr>
         <tr class="odd">
           <td>Number</td>
@@ -306,16 +299,85 @@ hljs.initHighlightingOnLoad();
         </tr>
       </tbody>
     </table>
-    <p>配置全局默认设置:</p>
-    <pre><code class="javascript">(function (config) {
-    config['lock'] = true;
-    config['fixed'] = true;
-    config['okVal'] = 'yes';
-    config['cancelVal'] = 'no';
-    // [more..]
-})(art.dialog.defaults);
-</code></pre>
-    <h2>配置参数范例</h2>
+    <h2 id="API">扩展方法</h2>
+    <table class="zebra">
+      <colgroup>
+      <col class="col1" />
+      <col class="col2" />
+      <col class="col3" />
+      </colgroup>
+      <thead>
+        <tr>
+          <th class="name">名称</th>
+          <th class="note" colspan="3">描述</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th>close()</th>
+          <td colspan="3">关闭对话框</td>
+        </tr>
+        <tr class="odd">
+          <th>show()</th>
+          <td colspan="3">显示对话框</td>
+        </tr>
+        <tr>
+          <th>hide()</th>
+          <td colspan="3">隐藏对话框</td>
+        </tr>
+        <tr>
+          <th>title(value)</th>
+          <td colspan="3">写入标题。无参数则返回标题容器元素</td>
+        </tr>
+        <tr>
+          <th>content(value)</th>
+          <td colspan="3">向消息容器中写入内容。参数支持字符串、DOM对象，无参数则返回内容容器元素</td>
+        </tr>
+        <tr class="odd">
+          <th>button(arguments)</th>
+          <td colspan="3">插入一个自定义按钮。<br />
+            配置参数成员：
+            <div>name —— 按钮名称</div>
+            <div>callback —— 按下后执行的函数</div>
+            <div>focus —— 是否聚焦点</div>
+            <div>disabled —— 是否标记按钮为不可用状态（后续可使用扩展方法让其恢复可用状态）</div>
+            <br />
+            <div>示例：</div>
+            <pre style="background:none; border:none 0;">button({
+    name: '登录',
+    focus: true,
+    callback: function () {}
+}, {
+    name: '取消'
+})</pre></td>
+        </tr>
+        <tr>
+          <th>follow(element)</th>
+          <td colspan="3">让对话框吸附到指定元素附近</td>
+        </tr>
+        <tr class="odd">
+          <th>position(left, top)</th>
+          <td colspan="3">重新定位对话框</td>
+        </tr>
+        <tr>
+          <th>size(width, height)</th>
+          <td colspan="3">重新设定对话框大小</td>
+        </tr>
+        <tr class="odd">
+          <th>lock()</th>
+          <td colspan="3">锁屏</td>
+        </tr>
+        <tr>
+          <th>unlock()</th>
+          <td colspan="3">解锁</td>
+        </tr>
+        <tr class="odd">
+          <th>time(val)</th>
+          <td colspan="3">定时关闭（单位秒）</td>
+        </tr>
+      </tbody>
+    </table>
+    <h2>配置参数演示</h2>
     <h3 id="content">内容 [content]</h3>
     <h4>1. 传入字符串</h4>
     <div id="demoCode_content">
@@ -363,7 +425,7 @@ hljs.initHighlightingOnLoad();
       <button class="runCode" name="demoCode_yes_no">运行&raquo;</button>
     </p>
     <h3 id="button">自定义按钮 [button]</h3>
-    <p>备注：回调函数this指向扩展接口，如果返回false将阻止对话框关闭；button参数对应的控制接口名称也是"button"</p>
+    <p>备注：回调函数this指向扩展接口，如果返回false将阻止对话框关闭；button参数对应的扩展方法名称也是"button"</p>
     <div id="demoCode_button">
       <pre><code class="javascript">art.dialog({
     id: 'testID',
@@ -471,7 +533,7 @@ art.dialog({id: 'testID2'}).title('3秒后关闭').time(3);
     <p class="buttons">
       <button class="runCode" id="followTestBtn" title="id=followTestBtn" name="demoCode_follow">运行&raquo;</button>
     </p>
-    <h4>2、使用简写形式 （已经绑定onclick事件，注意此返回值不再是对话框控制接口）</h4>
+    <h4>2、使用简写形式 （已经绑定onclick事件，注意此返回值不再是对话框扩展方法）</h4>
     <div id="demoCode_follow_fn">
       <pre><code class="javascript">art('#demoCode_follow_a').dialog({
 	content: '让对话框跟着某个元素，一个元素同时只能出现一个对话框'
@@ -556,89 +618,23 @@ art.dialog({id: 'testID2'}).title('3秒后关闭').time(3);
     <p class="buttons">
       <button class="runCode" name="demoCode_drag">运行&raquo;</button>
     </p>
-    <h2 id="API">控制接口</h2>
-    <table class="zebra">
-      <colgroup>
-      <col class="col1" />
-      <col class="col2" />
-      <col class="col3" />
-      </colgroup>
-      <thead>
-        <tr>
-          <th class="name">名称</th>
-          <th class="note" colspan="3">描述</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th>close()</th>
-          <td colspan="3">关闭对话框</td>
-        </tr>
-        <tr class="odd">
-          <th>show()</th>
-          <td colspan="3">显示对话框</td>
-        </tr>
-        <tr>
-          <th>hide()</th>
-          <td colspan="3">隐藏对话框</td>
-        </tr>
-        <tr>
-          <th>title(value)</th>
-          <td colspan="3">写入标题。无参数则返回标题容器元素</td>
-        </tr>
-        <tr>
-          <th>content(value)</th>
-          <td colspan="3">向消息容器中写入内容。参数支持字符串、DOM对象，无参数则返回内容容器元素</td>
-        </tr>
-        <tr class="odd">
-          <th>button(arguments)</th>
-          <td colspan="3">插入一个自定义按钮。<br />
-            如：button({name: '登录', callback: function () {_form.submit();}) 更多用法请见范例文档</td>
-        </tr>
-        <tr>
-          <th>follow(element)</th>
-          <td colspan="3">让对话框吸附到指定元素附近</td>
-        </tr>
-        <tr class="odd">
-          <th>position(left, top)</th>
-          <td colspan="3">重新定位对话框</td>
-        </tr>
-        <tr>
-          <th>size(width, height)</th>
-          <td colspan="3">重新设定对话框大小</td>
-        </tr>
-        <tr class="odd">
-          <th>lock()</th>
-          <td colspan="3">锁屏</td>
-        </tr>
-        <tr>
-          <th>unlock()</th>
-          <td colspan="3">解锁</td>
-        </tr>
-        <tr class="odd">
-          <th>time(val)</th>
-          <td colspan="3">定时关闭（单位秒）</td>
-        </tr>
-      </tbody>
-    </table>
-    <p>备注：控制接口返回值都是this，因此你可以使用链式编程风格。</p>
-    <h2>控制接口范例</h2>
-    <p>控制接口可以在对话框初始化后控制对话框，需要有一定的javascript基础，这里不做过多演示。</p>
-    <h3>获取控制接口：直接引用控制接口</h3>
+
+    <h2>扩展方法演示</h2>
+    <p>特别说明：扩展方法支持链式操作</p>
+    <h3>获取扩展方法一：直接引用返回</h3>
     <div id="demoCode_api_1">
       <pre><code class="javascript">var dialog = art.dialog({
 	title: '我是对话框',
-	fixed: true,
-    content: '我是初始化的内容'
+	content: '我是初始化的内容'
 });
       
-dialog.content('对话框内容被控制接口改变了').title('提示');
+dialog.content('对话框内容被扩展方法改变了').title('提示');
       </code></pre>
     </div>
     <p class="buttons">
       <button class="runCode" name="demoCode_api_1">运行&raquo;</button>
     </p>
-	<h3>获取控制接口：使用对话框ID</h3>
+    <h3>获取扩展方法二：通过对话框ID</h3>
     <div id="demoCode_api_2">
       <pre><code class="javascript">art.dialog({
     id: 'KDf435',
@@ -646,23 +642,24 @@ dialog.content('对话框内容被控制接口改变了').title('提示');
     content: '我是初始化的内容'
 });
       
-art.dialog.list['KDf435'].content('对话框内容被控制接口改变了').time(2);
+art.dialog.list['KDf435'].content('对话框内容被扩展方法改变了');
       </code></pre>
     </div>
     <p class="buttons">
       <button class="runCode" name="demoCode_api_2">运行&raquo;</button>
     </p>
-	<h3>获取控制接口：this引用</h3>
+
+    <h3>获取扩展方法三：回调函数中this</h3>
     <div id="demoCode_api_3">
       <pre><code class="javascript">art.dialog({
     title: '警告',
     content: '我是初始化的内容',
     ok: function () {
-    	this.content('你点了确定按钮').lock().time(2);
+        this.content('你点了确定按钮').lock();
         return false;
     },
     init: function () {
-    	this.content('对话框内容被控制接口改变了');
+        this.content('对话框内容被扩展方法改变了');
     }
 });
       </code></pre>
@@ -670,8 +667,7 @@ art.dialog.list['KDf435'].content('对话框内容被控制接口改变了').tim
     <p class="buttons">
       <button class="runCode" name="demoCode_api_3">运行&raquo;</button>
     </p>
-    <h3>演示四</h3>
-    <p>关闭页面所有对话框</p>
+    <h3>关闭页面所有对话框</h3>
     <div id="demoCode_api_4">
       <pre><code class="javascript">var list = art.dialog.list;
 for (var i in list) {
@@ -692,10 +688,13 @@ for (var i in list) {
     button: [{
     	name: '管理',
         callback: function () {
-            this.content('我更改了删除按钮').button({
+            this
+            .content('我更改了删除按钮')
+            .button({
                 name: '删除',
                 disabled: false
-            });
+            })
+            .lock();
             return false;
         },
         focus: true
@@ -706,7 +705,7 @@ dialog.button(
     {
         name: '删除',
         callback: function () {
-            alert('remove')
+            alert('delect')
         },
         disabled: true
     }
@@ -716,7 +715,30 @@ dialog.button(
     <p class="buttons">
       <button class="runCode" name="demoCode_api_button">运行&raquo;</button>
     </p>
-    <h3>改变关闭方式</h3>
+    <h3>标题倒计时</h3>
+    <div id="demoCode_api_title">
+      <pre><code class="javascript">var timer;
+art.dialog({
+	content: '时间越来越少，越来越少..',
+	init: function () {
+    	var that = this, i = 5;
+        var fn = function () {
+            that.title(i + '秒后关闭');
+            !i && that.close();
+            i --;
+        };
+		timer = setInterval(fn, 1000);
+        fn();
+	},
+    close: function () {
+    	clearInterval(timer);
+    }
+}).show();</code></pre>
+    </div>
+    <p class="buttons">
+      <button class="runCode" name="demoCode_api_title">运行&raquo;</button>
+    </p>
+    <h3>关闭不删除内容</h3>
     <div id="demoCode_api_fn">
       <pre><code class="javascript">art.dialog({
 	id: 'show-hide',
@@ -731,7 +753,7 @@ dialog.button(
       <button class="runCode" name="demoCode_api_fn">运行&raquo;</button>
     </p>
     <h3>AJAX高级应用：执行HTML片段中特殊script标签</h3>
-    <p>HTML片段中的<span style=" padding:1px; margin:0 3px; color:#03C; background:#F8F8F8">&lt;script type="<span style="color:#090">text/dialog</span>"&gt;&lt;/script&gt;</span>标签包裹的javascript将会在artDialog内部执行，其this指向对话框控制接口，这样可以进一步实现消息内容模块化。 </p>
+    <p>HTML片段中的<span style=" padding:1px; margin:0 3px; color:#03C; background:#F8F8F8">&lt;script type="<span style="color:#090">text/dialog</span>"&gt;&lt;/script&gt;</span>标签包裹的javascript将会在artDialog内部执行，其this指向对话框扩展方法，这样可以进一步实现消息内容模块化。 </p>
     <p>(本例子使用了AJAX，需要在服务器上运行。可打开 <a href="./ajaxContent/login.html" target="_blank">./ajaxContent/login.html</a> 查看源码中的自定义脚本)</p>
     <div id="demoCode_api_content">
       <pre><code class="javascript">var dialog = art.dialog({id: 'N3690',title: false});
@@ -750,99 +772,21 @@ $.ajax({
       <button class="runCode" name="demoCode_api_content">运行&raquo;</button>
     </p>
     <h2 id="plugin">插件：iframe应用工具</h2>
-    <table class="zebra">
-      <colgroup>
-      <col class="col1" />
-      <col class="col2" />
-      </colgroup>
-      <thead>
-        <tr>
-          <th class="name" style="width:22em">名称</th>
-          <th class="note" colspan="3">描述</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th class="separate" colspan="4"><abbrev>核心方法</abbrev></th>
-        </tr>
-        <tr class="odd">
-          <th><a href="iframeTop.html#top" target="_top">art.dialog.top</a></th>
-          <td colspan="3">获取artDialog可用最高层window对象。这与直接使用window.top不同，它能排除artDialog对象不存在已经或者顶层页面为框架集的情况<br />
-            这是iframe应用工具集中的核心方法，你可以用它来操作父页面对象（包括上面的对话框）</td>
-        </tr>
-        <tr>
-          <th><a href="iframeTop.html#data" target="_top">art.dialog.data(name, value)</a></th>
-          <td colspan="3">跨框架数据共享写入接口。<br />框架与框架之间以及与主页面之间进行数据交换是非常头疼的事情，常规情况下你必须知道框架的名称才能进行数据交换，如果是在复杂的多层框架下操作简直就是噩梦。<br />而data方法就是为了解决这个问题，你完全不用管框架层级问题，它可以写入任何类型的数据，而做到各个页面之间数据共享。</td>
-        </tr>
-        <tr class="odd">
-          <th><a href="iframeTop.html#data" target="_top">art.dialog.data(name)</a></th>
-          <td colspan="3">跨框架数据共享读取接口。指定name即返回数据，任何引用了artDialog的页面都有效</td>
-        </tr>
-        <tr>
-          <th><a href="iframeTop.html#removeData" target="_top">art.dialog.removeData(name)</a></th>
-          <td colspan="3">跨框架数据共享删除接口。删除指定名称的数据，任何引用了artDialog的页面都有效</td>
-        </tr>
-        <tr>
-          <th class="separate" colspan="4"><abbrev>异步数据对话框</abbrev></th>
-        </tr>
-        <tr class="odd">
-          <th><a href="iframeTop.html#open" target="_top">art.dialog.open(url, options, cache)</a></th>
-          <td colspan="3">创建一个iframe页面<br />
-            参数: 地址, 配置参数, 缓存开关(默认true)</td>
-        </tr>
-        <tr>
-          <th><a href="iframeTop.html#api" target="_top">art.dialog.open.api</a></th>
-          <td colspan="3">iframe页面获取open方法控制接口。 <br />(注意这个iframe中也必须引用artDialog脚本文件)</td>
-        </tr>
-        <tr class="odd">
-          <th><a href="iframeTop.html#opener" target="_top">art.dialog.opener</a></th>
-          <td colspan="3">iframe页面获取open方法触发来源页面window对象。 <br />(注意这个iframe中也必须引用artDialog脚本文件)</td>
-        </tr>
-        <tr>
-          <th><a href="iframeTop.html#close" target="_top">art.dialog.close()</a></th>
-          <td colspan="3">iframe页面关闭open方法创建的对话框的快捷方式。<br />close方法等同于：<div>var api = art.dialog.open.api;</div><div>api && api.close();</div><br />(注意这个iframe中也必须引用artDialog脚本文件)</td>
-        </tr>
-        <tr class="odd">
-          <th><a href="iframeTop.html#load" target="_top">art.dialog.load(url, options, cache)</a></th>
-          <td colspan="3">Ajax加载内容<br />
-            参数：地址, 配置参数, 缓存开关(默认true)</td>
-        </tr>
-        <tr>
-          <th class="separate" colspan="4"><abbrev>基础交互对话框</abbrev></th>
-        </tr>
-        <tr>
-          <th><a href="iframeTop.html#alert" target="_top">art.dialog.alert(content)</a></th>
-          <td colspan="3">警告消息 (同时只允许一个alert)<br />
-            参数: 内容</td>
-        </tr>
-        <tr class="odd">
-          <th><a href="iframeTop.html#confirm" target="_top">art.dialog.confirm(content, ok, cancel)</a></th>
-          <td colspan="3">确认 (同时只允许一个confirm)<br />
-            参数: 内容, 确定按钮回调函数, 取消按钮回调函数</td>
-        </tr>
-        <tr>
-          <th><a href="iframeTop.html#prompt" target="_top">art.dialog.prompt(content, ok, value)</a></th>
-          <td colspan="3">提问 (同时只允许一个prompt)<br />
-            参数: 内容, 确定按钮回调函数, 文本框默认值</td>
-        </tr>
-        <tr>
-          <th><a href="iframeTop.html#tips" target="_top">art.dialog.tips(content, time)</a></th>
-          <td colspan="3">短暂提示(同时只允许一个tips)<br />
-            参数: 内容、显示时间(单位秒, 默认1.5)</td>
-        </tr>
-        <tr>
-          <th class="separate" colspan="4"><abbrev>自定义</abbrev></th>
-        </tr>
-        <tr>
-          <th><a href="iframeTop.html#through" target="_top">art.dialog.through(options)</a></th>
-          <td colspan="3">创建一个普通可穿越框架的对话框<br />
-            不鼓励直接使用window.top这样的方式穿越，这样可能因为对话框触发页面重置导致其创建的对象在内存中被清空而发生异常</td>
-        </tr> 
-      </tbody>
-    </table>
-    <p>框架集页面无法覆盖第三方元素，不过可以使用一个iframe套住框架集页面就可以正常使用，见下面演示文档。</p>
-    <h2>扩展：iframe应用工具集范例</h2>
-    <p>请新打开新页面查看范例：<a href="./iframeTop.html" target="_top">./iframeTop.html</a></p>
+    <p>请新打开新页面查看范例：<a href="./iframeTop.html" target="_blank">./iframeTop.html</a></p>
+    <h2 id="in">应用到你的项目</h2>
+    <p>在页面head引入artDialog，其中skin参数表示对话框使用的风格文件(如果项目采用jQuery作为框架，则引用jQuery artDialog版本)。</p>
+    <pre><code>&lt;script src="artDialog/artDialog.js?skin=default"&gt;&lt;/script&gt;</code></pre>
+    <p>如果需要在iframe应用下提供 <a href="#plugin">更好的支持</a> ，可加载插件：</p>
+    <pre><code>&lt;script src="artDialog/plugins/iframeTools.js"&gt;&lt;/script&gt;</code></pre>
+    <p>配置全局默认参数(可选):</p>
+    <pre><code class="javascript">(function (config) {
+    config['lock'] = true;
+    config['fixed'] = true;
+    config['okVal'] = 'Ok';
+    config['cancelVal'] = 'Cancel';
+    // [more..]
+})(art.dialog.defaults);
+</code></pre>
   </div>
   <div id="footer"></div>
 </div>

@@ -1,6 +1,6 @@
 /*!
  * artDialog 4.1.2
- * Date: 2011-08-29 17:25
+ * Date: 2011-09-04 30:36
  * http://code.google.com/p/artdialog/
  * (c) 2009-2011 TangBin, http://www.planeArt.cn
  *
@@ -1324,7 +1324,7 @@ artDialog.fn = artDialog.prototype = {
 		
 		if (second) {
 			that._timer = setTimeout(function(){
-				that._trigger(cancel);
+				that._click(cancel);
 			}, 1000 * second);
 		};
 		
@@ -1395,7 +1395,12 @@ artDialog.fn = artDialog.prototype = {
 			'top:0;left:0;z-index:-1;filter:alpha(opacity=0)"></iframe>');
 			
 		lockMask.stop();
-		lockMask[0].ondblclick = function () { that.close() };
+		lockMask.bind('click', function () {
+			that._reset();
+		}).bind('dblclick', function () {
+			that.close();
+		});
+		
 		if (config.duration === 0) {
 			lockMask.css({opacity: config.opacity});
 		} else {
@@ -1410,7 +1415,7 @@ artDialog.fn = artDialog.prototype = {
 	},
 	
 	/** 解开屏锁 */
-	unlock: function (onfx) {
+	unlock: function () {
 		var that = this,
 			lockMaskWrap = that._lockMaskWrap,
 			lockMask = that._lockMask;
@@ -1426,16 +1431,12 @@ artDialog.fn = artDialog.prototype = {
 			};
 			style.cssText = 'display:none';
 			
-			if (_box) {
-				lockMaskWrap.remove();
-				that._lockMaskWrap = that._lockMask = null;
-			};
+			_box && lockMaskWrap.remove();
 		};
 		
-		lockMask.stop()
-		lockMask[0].ondblclick = null;
+		lockMask.stop().unbind();
 		that.DOM.wrap.removeClass('aui_state_lock');
-		if (that.config.duration === 0) {// 取消动画，快速关闭
+		if (!that.config.duration) {// 取消动画，快速关闭
 			un();
 		} else {
 			lockMask.animate({opacity: 0}, that.config.duration, un);
@@ -1599,56 +1600,55 @@ artDialog.fn = artDialog.prototype = {
 		style.position = 'absolute';
 	},
 	
-	// 按钮事件触发
-	_trigger: function (name) {
+	// 按钮回调函数触发
+	_click: function (name) {
 		var that = this,
 			fn = that._listeners[name] && that._listeners[name].callback;
 		return typeof fn !== 'function' || fn.call(that, window) !== false ?
 			that.close() : that;
 	},
 	
-	// 事件代理
-	_addEvent: function () {
-		var winResize, resizeTimer,
+	// 重置位置与尺寸
+	_reset: function (test) {
+		var newSize,
 			that = this,
-			config = that.config,
-			DOM = that.DOM,
-			isIE = 'all' in document,
-			winSize = _$window.width() * _$window.height();
+			oldSize = that._winSize || _$window.width() * _$window.height(),
+			elem = that._follow,
+			width = that._width,
+			height = that._height,
+			left = that._left,
+			top = that._top;
 		
-		winResize = function () {
-			var newSize,
-				oldSize = winSize,
-				elem = that._follow,
-				width = that._width,
-				height = that._height,
-				left = that._left,
-				top = that._top;
-			
-			if (isIE) {
-				// IE6~7 window.onresize bug
-				newSize = _$window.width() * _$window.height();
-				winSize = newSize;
-				if (oldSize === newSize) return;
-			};
-			
-			if (width || height) that.size(width, height);
-			
-			if (elem) {
-				that.follow(elem);
-			} else if (left || top) {
-				that.position(left, top);
-			};
+		if (test) {
+			// IE6~7 window.onresize bug
+			newSize = that._winSize =  _$window.width() * _$window.height();
+			if (oldSize === newSize) return;
 		};
 		
+		if (width || height) that.size(width, height);
+		
+		if (elem) {
+			that.follow(elem);
+		} else if (left || top) {
+			that.position(left, top);
+		};
+	},
+	
+	// 事件代理
+	_addEvent: function () {
+		var resizeTimer,
+			that = this,
+			config = that.config,
+			isIE = 'CollectGarbage' in window,
+			DOM = that.DOM;
+		
+		// 窗口调节事件
 		that._winResize = function () {
 			resizeTimer && clearTimeout(resizeTimer);
 			resizeTimer = setTimeout(function () {
-				winResize();
+				that._reset(isIE);
 			}, 40);
 		};
-		
-		// 窗口调节事件
 		_$window.bind('resize', that._winResize);
 		
 		// 监听点击
@@ -1659,11 +1659,11 @@ artDialog.fn = artDialog.prototype = {
 			if (target.disabled) return false; // IE BUG
 			
 			if (target === DOM.close[0]) {
-				that._trigger(config.cancelVal);
+				that._click(config.cancelVal);
 				return false;
 			} else {
 				callbackID = target[_expando + 'callback'];
-				callbackID && that._trigger(callbackID);
+				callbackID && that._click(callbackID);
 			};
 			
 			that._ie6SelectFix();
@@ -1716,7 +1716,7 @@ _$document.bind('keydown', function (event) {
 
 	if (!api || !api.config.esc || rinput.test(nodeName)) return;
 		
-	keyCode === 27 && api._trigger(api.config.cancelVal);
+	keyCode === 27 && api._click(api.config.cancelVal);
 });
 
 
@@ -1735,7 +1735,7 @@ _path = window['_artDialog_path'] || (function (script, i, me) {
 
 
 
-// 无阻塞载入CSS (如"artDialog.js#skin=aero")
+// 无阻塞载入CSS (如"artDialog.js?skin=aero")
 _skin = _thisScript.src.split('skin=')[1];
 if (_skin) {
 	var link = document.createElement('link');
@@ -1764,8 +1764,9 @@ try {
 
 
 /** 模板 */
+// 表格拥有很强的容错能力、以及自带布局的特性适合封装UI组件
 // 使用uglifyjs压缩能够预先处理"+"号以合并字符串
-// @see	http://marijnhaverbeke.nl/uglifyjs
+// uglifyjs: http://marijnhaverbeke.nl/uglifyjs
 artDialog.templates = 
 '<div class="aui_outer">' +
 	'<table class="aui_border">' +
@@ -1777,8 +1778,9 @@ artDialog.templates =
 			'</tr>' +
 			'<tr>' +
 				'<td class="aui_w"></td>' +
-				'<td class="aui_center">' +
-					'<table class="aui_inner">' +
+				'<td class="aui_c">' +
+					'<div class="aui_inner">' +
+					'<table class="aui_dialog">' +
 						'<tbody>' +
 							'<tr>' +
 								'<td colspan="2" class="aui_header">' +
@@ -1805,6 +1807,7 @@ artDialog.templates =
 							'</tr>' +
 						'</tbody>' +
 					'</table>' +
+					'</div>' +
 				'</td>' +
 				'<td class="aui_e"></td>' +
 			'</tr>' +

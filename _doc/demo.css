@@ -27,13 +27,15 @@ html>body #logo a { display:block; margin-left:10px; height:60px; text-indent:-9
 #doc { height:100%; background:url(images/bottom.png) repeat-x 0 bottom; }
 #header { height:40px; padding:30px 0; }
 #logo { float:left; width:320px; }
-#nav { float:left; margin-top:16px; margin-left:58px; background:#232323\9; background:rgba(0, 0, 0, .5); -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius:10px; }
+#nav { float:left; margin-top:16px; margin-left:58px; background:#232323\9; background:rgba(0, 0, 0, .5); border-radius:5px; }
 #nav li { margin:0; }
 #nav li, #nav li a { display:inline-block; *zoom:1; *display:inline; }
 #nav li a { margin:0 4px; padding:3px 6px; color:#FFF; font-size:1em; font-weight:bold; }
+#nav li a.select { border-bottom:solid 1px #F00; background:#C72015; box-shadow:0 3px 5px rgba(255, 0, 0, .7); }
 
 #header, #main, #footer { margin:0 80px; }
-#main { min-height:640px; padding:15px;  position:relative; width:50em; font-size:1.16em; background:#FFF; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius:10px; border: solid #000 1px; box-shadow:0 0 8px rgba(0, 0, 0, .7); }
+#main { min-height:640px\9;padding:15px;  position:relative; width:50em; font-size:1.16em; background:#FFF; -moz-border-radius: 10px; -webkit-border-radius: 10px; border-radius:10px; border: solid #000 1px; box-shadow:0 0 8px rgba(0, 0, 0, .7); }
+@media screen and (min-width:0) {#main{min-height:640px;}}
 #main .mainWrap { min-height:500px; _height:500px; }
 
 #main .about { padding:2em; padding-top:3em; margin-bottom:15px; }

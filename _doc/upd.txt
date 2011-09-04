@@ -32,7 +32,7 @@
 1.	art.dialog.get(id) 变更为 art.dialog.list[id]
 
 2.	不再支持多皮肤共存,css文件默认不自动加载：
-	需要在引用的脚步文件写url参数：artDialog.js#skin=default
+	需要在引用的脚步文件写url参数：artDialog.js?skin=default
 
 3.	不再支持页面载入即时弹出对话框, 而建议在
 	jQuery(function () {/* [code..] */})中或者window.onload中调用，否则页面会报错

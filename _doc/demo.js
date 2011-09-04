@@ -85,7 +85,24 @@ $(function () {
 		_demoSkin();
 		return false;
 	});
+	
+	// 点亮导航
+	var links = $('#nav')[0].getElementsByTagName("a"),
+		URL = document.URL.split('#')[0],
+		last = URL.charAt(URL.length - 1);
+		
+	if (last === '/') {
+		links[0].className += ' select';
+	} else {
+		for (var i=0; i<links.length; i++) {
+			if (URL.toLowerCase().indexOf(links[i].href.toLowerCase()) !== -1) {
+				links[i].className += ' select';
+			};
+		};
+	};	
 });
+
+
 
 // firebug
 (function () {
