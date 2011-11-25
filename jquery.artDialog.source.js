@@ -1,13 +1,13 @@
 /*!
  * artDialog 4.1.3
- * Date: 2011-11-25 13:54
+ * Date: 2011-11-25 15:46
  * http://code.google.com/p/artdialog/
  * (c) 2009-2011 TangBin, http://www.planeArt.cn
  *
  * This is licensed under the GNU LGPL, version 2.1 or later.
  * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
  */
-
+ 
 ;(function ($, window, undefined) {
 
 $.noop = $.noop || function () {}; // jQuery 1.3.2
@@ -724,7 +724,7 @@ artDialog.fn = artDialog.prototype = {
 	
 	// 自动切换定位类型
 	_autoPositionType: function () {
-		this[this.config.fixed ? '_setFixed' : '_setAbsolute']();
+		this[this.config.fixed ? '_setFixed' : '_setAbsolute']();/////////////
 	},
 	
 	
@@ -1118,7 +1118,7 @@ artDialog.dragEvent.prototype = {
 _use = function (event) {
 	var limit, startWidth, startHeight, startLeft, startTop, isResize,
 		api = artDialog.focus,
-		config = api.config,
+		//config = api.config,
 		DOM = api.DOM,
 		wrap = DOM.wrap,
 		title = DOM.title,
@@ -1169,13 +1169,11 @@ _use = function (event) {
 			
 		} else {
 			var style = wrap[0].style,
-				left = x + startLeft,
-				top = y + startTop;
+				left = Math.max(limit.minX, Math.min(limit.maxX, x + startLeft)),
+				top = Math.max(limit.minY, Math.min(limit.maxY, y + startTop));
 
-			config.left = Math.max(limit.minX, Math.min(limit.maxX, left));
-			config.top = Math.max(limit.minY, Math.min(limit.maxY, top));
-			style.left = config.left + 'px';
-			style.top = config.top + 'px';
+			style.left = left  + 'px';
+			style.top = top + 'px';
 		};
 			
 		clsSelect();
@@ -1190,7 +1188,7 @@ _use = function (event) {
 			_$window.unbind('blur', _dragEvent.end);
 		_isSetCapture && title[0].releaseCapture();
 		
-		_isIE6 && api._autoPositionType();
+		_isIE6 && api._isRun && api._autoPositionType();
 		
 		wrap.removeClass('aui_state_drag');
 	};

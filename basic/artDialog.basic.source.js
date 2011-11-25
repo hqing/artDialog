@@ -413,13 +413,14 @@ $.event = {
 	fix: function (event) {
 		if (event.target) return event;
 		
-		function Event () {
-			this.target = event.srcElement || document;
-			this.preventDefault = function () {this.returnValue = false},
-			this.stopPropagation = function () {this.cancelBubble = true}
+		var event2 = {
+			target: event.srcElement || document,
+			preventDefault: function () {event.returnValue = false},
+			stopPropagation: function () {event.cancelBubble = true}
 		};
-		Event.prototype = event;// 浅拷贝event，防止侵入event造成IE内存泄漏
-		return new Event;
+		// IE6/7/8 在原生window.event对象写入数据会导致内存无法回收，应当采用拷贝
+		for (var i in event) event2[i] = event[i];
+		return event2;
 	}
 	
 };
