@@ -1,13 +1,12 @@
 /*!
- * artDialog 4.1.2
- * Date: 2011-09-04 30:36
+ * artDialog 4.1.3
+ * Date: 2011-11-25 13:54
  * http://code.google.com/p/artdialog/
  * (c) 2009-2011 TangBin, http://www.planeArt.cn
  *
  * This is licensed under the GNU LGPL, version 2.1 or later.
  * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
  */
- 
 
 ;(function ($, window, undefined) {
 
@@ -92,7 +91,6 @@ artDialog.fn = artDialog.prototype = {
 		that.config = config;
 		that.DOM = DOM = that.DOM || that._getDOM();
 		
-		// 操作元素
 		DOM.wrap.addClass(config.skin);
 		DOM.close[config.cancel === false ? 'hide' : 'show']();
 		DOM.icon[0].style.display = icon ? '' : 'none';
@@ -101,7 +99,6 @@ artDialog.fn = artDialog.prototype = {
 		DOM.title.css('cursor', config.drag ? 'move' : 'auto');
 		DOM.content.css('padding', config.padding);
 		
-		// 初始化方法
 		that[config.show ? 'show' : 'hide'](true)
 		that.button(config.button)
 		.title(config.title)
@@ -947,7 +944,7 @@ try {
 // uglifyjs: http://marijnhaverbeke.nl/uglifyjs
 artDialog.fn._templates =
 '<div class="aui_outer">'
-+	'<table class="aui_border" border="0" cellspacing="0" cellpadding="0">'
++	'<table class="aui_border">'
 +		'<tbody>'
 +			'<tr>'
 +				'<td class="aui_nw"></td>'
@@ -958,7 +955,7 @@ artDialog.fn._templates =
 +				'<td class="aui_w"></td>'
 +				'<td class="aui_c">'
 +					'<div class="aui_inner">'
-+					'<table class="aui_dialog" border="0" cellspacing="0" cellpadding="0">'
++					'<table class="aui_dialog">'
 +						'<tbody>'
 +							'<tr>'
 +								'<td colspan="2" class="aui_header">'

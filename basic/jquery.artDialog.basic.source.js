@@ -1,12 +1,13 @@
 /*!
  * artDialog basic
- * Date: 2011-09-04 30:36
+ * Date: 2011-11-25 13:54
  * http://code.google.com/p/artdialog/
  * (c) 2009-2011 TangBin, http://www.planeArt.cn
  *
  * This is licensed under the GNU LGPL, version 2.1 or later.
  * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
  */
+ 
 ;(function ($, window, undefined) {
 
 $.noop = $.noop || function () {}; // jQuery 1.3.2
@@ -84,7 +85,6 @@ artDialog.fn = artDialog.prototype = {
 		that.config = config;
 		that.DOM = DOM = that.DOM || that._getDOM();
 		
-		// 操作元素
 		DOM.wrap.addClass(config.skin);
 		DOM.wrap.css('position', config.fixed ? 'fixed' : 'absolute');
 		DOM.close[config.cancel === false ? 'hide' : 'show']();
@@ -92,7 +92,6 @@ artDialog.fn = artDialog.prototype = {
 		DOM.title.css('cursor', config.drag ? 'move' : 'auto');
 		DOM.content.css('padding', config.padding);
 		
-		// 初始化方法
 		that[config.show ? 'show' : 'hide'](true)
 		.button(config.button)
 		.title(config.title)
@@ -104,7 +103,7 @@ artDialog.fn = artDialog.prototype = {
 		? that.follow(config.follow)
 		: that.position();
 		
-		that.focus(config.focus);
+		that.focus();
 		config.lock && that.lock();
 		
 		that._addEvent();
@@ -422,7 +421,7 @@ artDialog.fn = artDialog.prototype = {
 		wrap.addClass('aui_state_focus');
 		
 		// 添加焦点
-		if (!arguments[0]) {
+		if (that.config.focus) {
 			try {
 				elemFocus = that._focus && that._focus[0] || DOM.close[0];
 				elemFocus && elemFocus.focus();
@@ -691,7 +690,7 @@ artDialog.defaults = {
 	skin: '',					// 皮肤名(多皮肤共存预留接口)
 	time: null,					// 自动关闭时间
 	esc: true,					// 是否支持Esc键关闭
-	focus: true,				// 是否支持对话框按钮聚焦
+	focus: true,				// 是否支持对话框按钮自动聚焦
 	show: true,					// 初始化后是否显示对话框
 	follow: null,				// 跟随某元素(即让对话框在元素附近弹出)
 	lock: false,				// 是否锁屏
@@ -703,5 +702,5 @@ artDialog.defaults = {
 };
 
 window.artDialog = $.dialog = $.artDialog = artDialog;
-}((this.jQuery && (this.art = jQuery)) || this.art, this));
+}(this.art || this.jQuery && (this.art = jQuery), this));
 
