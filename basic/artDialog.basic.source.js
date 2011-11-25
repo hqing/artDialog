@@ -1,6 +1,6 @@
 /*!
  * artDialog basic
- * Date: 2011-09-04 30:36
+ * Date: 2011-11-25 13:54
  * http://code.google.com/p/artdialog/
  * (c) 2009-2011 TangBin, http://www.planeArt.cn
  *
@@ -9,10 +9,10 @@
  */
  
 ;(function (window, undefined) {
-if (window.jQuery) return jQuery;
+//if (window.jQuery) return jQuery;
 
-var $ = window.art = function (selector, content) {
-    	return new $.fn.init(selector, content);
+var $ = window.art = function (selector, context) {
+    	return new $.fn.init(selector, context);
 	},
 	quickExpr = /^(?:[^<]*(<[\w\W]+>)[^>]*$|#([\w\-]+)$)/,
 	rclass = /[\n\t]/g;
@@ -348,7 +348,7 @@ $.event = {
 			cache.elem = elem;
 			cache.handler = that.handler(cache);
 			
-			document.addEventListener
+			elem.addEventListener
 			? elem.addEventListener(type, cache.handler, false)
 			: elem.attachEvent('on' + type, cache.handler);
 		};
@@ -385,7 +385,7 @@ $.event = {
 		};
 		
 		if (cache.listeners.length === 0) {
-			document.removeEventListener
+			elem.removeEventListener
 			? elem.removeEventListener(type, cache.handler, false)
 			: elem.detachEvent('on' + type, cache.handler);
 			
@@ -396,7 +396,7 @@ $.event = {
 		};
 	},
 	
-	/** @inner 事件监听器 */
+	/** @inner 事件句柄 */
 	handler: function (cache) {
 		return function (event) {
 			event = $.event.fix(event || window.event);
@@ -413,14 +413,13 @@ $.event = {
 	fix: function (event) {
 		if (event.target) return event;
 		
-		var event2 = {
-			target: event.srcElement || document,
-			preventDefault: function () {event.returnValue = false},
-			stopPropagation: function () {event.cancelBubble = true}
+		function Event () {
+			this.target = event.srcElement || document;
+			this.preventDefault = function () {this.returnValue = false},
+			this.stopPropagation = function () {this.cancelBubble = true}
 		};
-		// IE6/7/8 在原生window.event对象写入数据会导致内存无法回收，应当采用拷贝
-		for (var i in event) event2[i] = event[i];
-		return event2;
+		Event.prototype = event;// 浅拷贝event，防止侵入event造成IE内存泄漏
+		return new Event;
 	}
 	
 };
@@ -461,7 +460,7 @@ $.css = 'defaultView' in document && 'getComputedStyle' in document.defaultView 
 $.each(['Left', 'Top'], function (i, name) {
     var method = 'scroll' + name;
 
-    $.fn[method] = function (val) {
+    $.fn[method] = function () {
         var elem = this[0], win;
 
 		win = getWindow(elem);
@@ -540,7 +539,7 @@ var artDialog = function (config, ok, cancel) {
 		config = {content: config, fixed: !_isMobile};
 	};
 	
-	var api, buttons = [],
+	var api,
 		defaults = artDialog.defaults,
 		elem = config.follow = this.nodeType === 1 && this || config.follow;
 		
@@ -597,7 +596,6 @@ artDialog.fn = artDialog.prototype = {
 		that.config = config;
 		that.DOM = DOM = that.DOM || that._getDOM();
 		
-		// 操作元素
 		DOM.wrap.addClass(config.skin);
 		DOM.wrap.css('position', config.fixed ? 'fixed' : 'absolute');
 		DOM.close[config.cancel === false ? 'hide' : 'show']();
@@ -605,7 +603,6 @@ artDialog.fn = artDialog.prototype = {
 		DOM.title.css('cursor', config.drag ? 'move' : 'auto');
 		DOM.content.css('padding', config.padding);
 		
-		// 初始化方法
 		that[config.show ? 'show' : 'hide'](true)
 		.button(config.button)
 		.title(config.title)
@@ -617,7 +614,7 @@ artDialog.fn = artDialog.prototype = {
 		? that.follow(config.follow)
 		: that.position();
 		
-		that.focus(config.focus);
+		that.focus();
 		config.lock && that.lock();
 		
 		that._addEvent();
@@ -935,7 +932,7 @@ artDialog.fn = artDialog.prototype = {
 		wrap.addClass('aui_state_focus');
 		
 		// 添加焦点
-		if (!arguments[0]) {
+		if (that.config.focus) {
 			try {
 				elemFocus = that._focus && that._focus[0] || DOM.close[0];
 				elemFocus && elemFocus.focus();
@@ -972,7 +969,7 @@ artDialog.fn = artDialog.prototype = {
 		lockMask.bind('click', function () {
 			that._reset();
 		}).bind('dblclick', function () {
-			that.close();
+			that._click(that.config.cancelVal);
 		});
 		
 		that._lockMaskWrap = lockMaskWrap;
@@ -1000,7 +997,7 @@ artDialog.fn = artDialog.prototype = {
 	_getDOM: function () {
 		var wrap = document.createElement('div');
 		wrap.style.cssText = 'position:absolute;left:0;top:0';
-		wrap.innerHTML = artDialog.templates;
+		wrap.innerHTML = this._templates;
 		document.body.appendChild(wrap);
 		
 		var name, i = 0,
@@ -1130,58 +1127,57 @@ _$document.bind('keydown', function (event) {
 
 
 /** 模板 */
-// 表格拥有很强的容错能力、以及自带布局的特性适合封装UI组件
 // 使用uglifyjs压缩能够预先处理"+"号以合并字符串
 // @see	http://marijnhaverbeke.nl/uglifyjs
-artDialog.templates = 
-'<div class="aui_outer">' +
-	'<table class="aui_border">' +
-		'<tbody>' +
-			'<tr>' +
-				'<td class="aui_nw"></td>' +
-				'<td class="aui_n"></td>' +
-				'<td class="aui_ne"></td>' +
-			'</tr>' +
-			'<tr>' +
-				'<td class="aui_w"></td>' +
-				'<td class="aui_c">' +
-					'<div class="aui_inner">' +
-					'<table class="aui_dialog">' +
-						'<tbody>' +
-							'<tr>' +
-								'<td class="aui_header">' +
-									'<div class="aui_titleBar">' +
-										'<div class="aui_title"></div>' +
-										'<a class="aui_close" href="javascript:/*artDialog*/;">' +
-											'\xd7' +
-										'</a>' +
-									'</div>' +
-								'</td>' +
-							'</tr>' +
-							'<tr>' +
-								'<td class="aui_main">' +
-									'<div class="aui_content"></div>' +
-								'</td>' +
-							'</tr>' +
-							'<tr>' +
-								'<td class="aui_footer">' +
-									'<div class="aui_buttons"></div>' +
-								'</td>' +
-							'</tr>' +
-						'</tbody>' +
-					'</table>' +
-					'</div>' +
-				'</td>' +
-				'<td class="aui_e"></td>' +
-			'</tr>' +
-			'<tr>' +
-				'<td class="aui_sw"></td>' +
-				'<td class="aui_s"></td>' +
-				'<td class="aui_se"></td>' +
-			'</tr>' +
-		'</tbody>' +
-	'</table>' +
-'</div>';
+artDialog.fn._templates = 
+'<div class="aui_outer">'
++	'<table class="aui_border">'
++		'<tbody>'
++			'<tr>'
++				'<td class="aui_nw"></td>'
++				'<td class="aui_n"></td>'
++				'<td class="aui_ne"></td>'
++			'</tr>'
++			'<tr>'
++				'<td class="aui_w"></td>'
++				'<td class="aui_c">'
++					'<div class="aui_inner">'
++					'<table class="aui_dialog">'
++						'<tbody>'
++							'<tr>'
++								'<td class="aui_header">'
++									'<div class="aui_titleBar">'
++										'<div class="aui_title"></div>'
++										'<a class="aui_close" href="javascript:/*artDialog*/;">'
++											'\xd7'
++										'</a>'
++									'</div>'
++								'</td>'
++							'</tr>'
++							'<tr>'
++								'<td class="aui_main">'
++									'<div class="aui_content"></div>'
++								'</td>'
++							'</tr>'
++							'<tr>'
++								'<td class="aui_footer">'
++									'<div class="aui_buttons"></div>'
++								'</td>'
++							'</tr>'
++						'</tbody>'
++					'</table>'
++					'</div>'
++				'</td>'
++				'<td class="aui_e"></td>'
++			'</tr>'
++			'<tr>'
++				'<td class="aui_sw"></td>'
++				'<td class="aui_s"></td>'
++				'<td class="aui_se"></td>'
++			'</tr>'
++		'</tbody>'
++	'</table>'
++'</div>';
 
 
 
@@ -1205,7 +1201,7 @@ artDialog.defaults = {
 	skin: '',					// 皮肤名(多皮肤共存预留接口)
 	time: null,					// 自动关闭时间
 	esc: true,					// 是否支持Esc键关闭
-	focus: true,				// 是否支持对话框按钮聚焦
+	focus: true,				// 是否支持对话框按钮自动聚焦
 	show: true,					// 初始化后是否显示对话框
 	follow: null,				// 跟随某元素(即让对话框在元素附近弹出)
 	lock: false,				// 是否锁屏
@@ -1217,5 +1213,5 @@ artDialog.defaults = {
 };
 
 window.artDialog = $.dialog = $.artDialog = artDialog;
-}((window.jQuery && (window.art = jQuery)) || window.art, this));
+}(this.art || this.jQuery && (this.art = jQuery), this));
 

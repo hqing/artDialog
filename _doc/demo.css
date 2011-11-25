@@ -17,6 +17,7 @@ sup, sub { font-size: 100%; vertical-align: baseline; }
 :link, :visited, ins { text-decoration: none; }
 blockquote, q { quotes: none; }
 blockquote:before, blockquote:after, q:before, q:after { content: ''; content: none; }
+pre { padding:1em; background-color:#F8F8F8; border:solid 1px #F3F3F3; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius:4px; }
 /**/
 body { font-size:75%; color:#666; font-family:'Microsoft Yahei', Tahoma, Arial!important; font-family:'宋体', Tahoma, Arial; background:#011a15 url(images/bg.png) repeat-x left top; }
 a { color:#214FA3; }

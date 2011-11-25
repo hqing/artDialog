@@ -261,10 +261,10 @@ artDialog.tips = function (content, time) {
 		title: false,
         cancel: false,
 		fixed: true,
-		lock: false
+		lock: true
 	})
     .content('&lt;div style="padding: 0 1em;"&gt;' + content + '&lt;/div&gt;')
-	.time(time || 1.5);
+	.time(time || 1);
 };</code></pre>
     </div>
     <script>$('#demoCode_dialogs').runCode();</script>

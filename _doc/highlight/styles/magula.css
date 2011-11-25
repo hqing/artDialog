@@ -7,7 +7,7 @@ Date: 2009-01-03
 Music: Aphex Twin / Xtal
 */
 
-pre { padding:1em; background-color:#F8F8F8; border:solid 1px #F3F3F3; -moz-border-radius: 4px; -webkit-border-radius: 4px; border-radius:4px; }
+
 pre code, pre .ruby .subst, pre .lisp .title { color: black; }
 pre .string, pre .title, pre .parent, pre .tag .attribute .value, pre .rules .value, pre .rules .value .number, pre .preprocessor, pre .ruby .symbol, pre .ruby .symbol .string, pre .ruby .symbol .keyword, pre .ruby .symbol .keymethods, pre .instancevar, pre .aggregate, pre .template_tag, pre .django .variable, pre .smalltalk .class, pre .addition, pre .flow, pre .stream, pre .bash .variable, pre .apache .cbracket { color: #008200; }
 pre .comment, pre .annotation, pre .template_comment, pre .diff .header, pre .chunk { color: #777; }

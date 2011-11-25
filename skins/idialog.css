@@ -38,7 +38,7 @@ button.aui_state_highlight:active { border-color:#1c6a9e; filter: progid:DXImage
 
 .aui_inner { background:#FFF; }
 .aui_titleBar { width:100%; }
-.aui_title { position:absolute; left:0; top:0; width:100%; height:22px; text-align:left; text-indent:-999em; }
+.aui_title { position:absolute; left:0; top:0; width:100%; height:22px; text-align:left; text-indent:-999em; font-size:0; }
 .aui_nw, .aui_ne, .aui_sw, .aui_se, .aui_n, .aui_s, .aui_close { background-image:url(idialog/idialog_s.png); background-repeat:no-repeat; }
 .aui_nw { width:15px; height:15px; background-position: 0 0; _png:idialog/ie6/aui_nw.png; }
 .aui_ne { width:15px; height:15px; background-position: -15px 0; _png:idialog/ie6/aui_ne.png; }

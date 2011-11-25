@@ -36,7 +36,8 @@ $(function(){
 	
 	// 跳转到头部
 	var $footer = $('#footer');
-	if ($footer[0]) $footer.bind('click', function () {
+	if (!$footer[0]) return;
+	$footer.bind('click', function () {
 		window.scrollTo(0, 0);
 		return false;
 	}).css('cursor', 'pointer')[0].title = '回到页头';
@@ -81,7 +82,9 @@ _demoSkin.tmpl = function (data) {
 
 $(function () {
 	var $skin = $('#nav-skin');
-	$skin[0] && $skin.bind('click', function () {
+	if (!$skin[0]) return;
+	
+	$skin.bind('click', function () {
 		_demoSkin();
 		return false;
 	});

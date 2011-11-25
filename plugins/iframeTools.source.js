@@ -1,6 +1,6 @@
 /*!
  * artDialog iframeTools
- * Date: 2011-08-29 17:25
+ * Date: 2011-11-25 13:54
  * http://code.google.com/p/artdialog/
  * (c) 2009-2011 TangBin, http://www.planeArt.cn
  *
@@ -73,7 +73,7 @@ artDialog.data = function (name, value) {
 		cache = top[_data] || {};
 	top[_data] = cache;
 	
-	if (value) {
+	if (value !== undefined) {
 		cache[name] = value;
 	} else {
 		return cache[name];
@@ -129,7 +129,7 @@ artDialog.open = function (url, options, cache) {
 		$content, $main, iframe, $iframe, $idoc, iwin, ibody,
 		top = artDialog.top,
 		initCss = 'position:absolute;left:-9999em;top:-9999em;border:none 0;background:transparent',
-		loadCss = 'width:100%;height:100%;border:none 0';//title = options.title;
+		loadCss = 'width:100%;height:100%;border:none 0';
 		
 	if (cache === false) {
 		var ts = (new Date()).getTime(),
@@ -269,7 +269,7 @@ artDialog.close = function () {
 // 点击iframe内容切换叠加高度
 _top != window && $(document).bind('mousedown', function () {
 	var api = artDialog.open.api;
-	api && api.focus(true);
+	api && api.focus();
 });
 
 
@@ -462,5 +462,5 @@ $(function () {
 	};
 });
 
-})(window.jQuery || window.art, this, this.artDialog);
+})(this.art || this.jQuery, this, this.artDialog);
 

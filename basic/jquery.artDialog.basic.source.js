@@ -7,7 +7,6 @@
  * This is licensed under the GNU LGPL, version 2.1 or later.
  * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
  */
- 
 ;(function ($, window, undefined) {
 
 $.noop = $.noop || function () {}; // jQuery 1.3.2
@@ -28,7 +27,7 @@ var artDialog = function (config, ok, cancel) {
 		config = {content: config, fixed: !_isMobile};
 	};
 	
-	var api, buttons = [],
+	var api,
 		defaults = artDialog.defaults,
 		elem = config.follow = this.nodeType === 1 && this || config.follow;
 		
@@ -460,7 +459,7 @@ artDialog.fn = artDialog.prototype = {
 		lockMask.bind('click', function () {
 			that._reset();
 		}).bind('dblclick', function () {
-			that.close();
+			that._click(that.config.cancelVal);
 		});
 		
 		that._lockMaskWrap = lockMaskWrap;
@@ -488,7 +487,7 @@ artDialog.fn = artDialog.prototype = {
 	_getDOM: function () {
 		var wrap = document.createElement('div');
 		wrap.style.cssText = 'position:absolute;left:0;top:0';
-		wrap.innerHTML = artDialog.templates;
+		wrap.innerHTML = this._templates;
 		document.body.appendChild(wrap);
 		
 		var name, i = 0,
@@ -618,58 +617,57 @@ _$document.bind('keydown', function (event) {
 
 
 /** 模板 */
-// 表格拥有很强的容错能力、以及自带布局的特性适合封装UI组件
 // 使用uglifyjs压缩能够预先处理"+"号以合并字符串
 // @see	http://marijnhaverbeke.nl/uglifyjs
-artDialog.templates = 
-'<div class="aui_outer">' +
-	'<table class="aui_border">' +
-		'<tbody>' +
-			'<tr>' +
-				'<td class="aui_nw"></td>' +
-				'<td class="aui_n"></td>' +
-				'<td class="aui_ne"></td>' +
-			'</tr>' +
-			'<tr>' +
-				'<td class="aui_w"></td>' +
-				'<td class="aui_c">' +
-					'<div class="aui_inner">' +
-					'<table class="aui_dialog">' +
-						'<tbody>' +
-							'<tr>' +
-								'<td class="aui_header">' +
-									'<div class="aui_titleBar">' +
-										'<div class="aui_title"></div>' +
-										'<a class="aui_close" href="javascript:/*artDialog*/;">' +
-											'\xd7' +
-										'</a>' +
-									'</div>' +
-								'</td>' +
-							'</tr>' +
-							'<tr>' +
-								'<td class="aui_main">' +
-									'<div class="aui_content"></div>' +
-								'</td>' +
-							'</tr>' +
-							'<tr>' +
-								'<td class="aui_footer">' +
-									'<div class="aui_buttons"></div>' +
-								'</td>' +
-							'</tr>' +
-						'</tbody>' +
-					'</table>' +
-					'</div>' +
-				'</td>' +
-				'<td class="aui_e"></td>' +
-			'</tr>' +
-			'<tr>' +
-				'<td class="aui_sw"></td>' +
-				'<td class="aui_s"></td>' +
-				'<td class="aui_se"></td>' +
-			'</tr>' +
-		'</tbody>' +
-	'</table>' +
-'</div>';
+artDialog.fn._templates = 
+'<div class="aui_outer">'
++	'<table class="aui_border">'
++		'<tbody>'
++			'<tr>'
++				'<td class="aui_nw"></td>'
++				'<td class="aui_n"></td>'
++				'<td class="aui_ne"></td>'
++			'</tr>'
++			'<tr>'
++				'<td class="aui_w"></td>'
++				'<td class="aui_c">'
++					'<div class="aui_inner">'
++					'<table class="aui_dialog">'
++						'<tbody>'
++							'<tr>'
++								'<td class="aui_header">'
++									'<div class="aui_titleBar">'
++										'<div class="aui_title"></div>'
++										'<a class="aui_close" href="javascript:/*artDialog*/;">'
++											'\xd7'
++										'</a>'
++									'</div>'
++								'</td>'
++							'</tr>'
++							'<tr>'
++								'<td class="aui_main">'
++									'<div class="aui_content"></div>'
++								'</td>'
++							'</tr>'
++							'<tr>'
++								'<td class="aui_footer">'
++									'<div class="aui_buttons"></div>'
++								'</td>'
++							'</tr>'
++						'</tbody>'
++					'</table>'
++					'</div>'
++				'</td>'
++				'<td class="aui_e"></td>'
++			'</tr>'
++			'<tr>'
++				'<td class="aui_sw"></td>'
++				'<td class="aui_s"></td>'
++				'<td class="aui_se"></td>'
++			'</tr>'
++		'</tbody>'
++	'</table>'
++'</div>';
 
 
 
@@ -705,5 +703,5 @@ artDialog.defaults = {
 };
 
 window.artDialog = $.dialog = $.artDialog = artDialog;
-}((window.jQuery && (window.art = jQuery)) || window.art, this));
+}((this.jQuery && (this.art = jQuery)) || this.art, this));
 
