@@ -110,7 +110,7 @@ $(function () {
 // firebug
 (function () {
 var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-ga.src = 'http://getfirebug.com/firebug-lite-beta.js';
+ga.src = 'https://getfirebug.com/firebug-lite.js';
 var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
 })();
 

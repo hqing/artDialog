@@ -269,7 +269,7 @@ artDialog.close = function () {
 // 点击iframe内容切换叠加高度
 _top != window && $(document).bind('mousedown', function () {
 	var api = artDialog.open.api;
-	api && api.focus();
+	api && api.zIndex();
 });
 
 
@@ -315,7 +315,7 @@ artDialog.load = function(url, options, cache){
  * 警告
  * @param	{String}	消息内容
  */
-artDialog.alert = function (content) {
+artDialog.alert = function (content, callback) {
 	return _proxyDialog({
 		id: 'Alert',
 		zIndex: _zIndex(),
@@ -323,7 +323,8 @@ artDialog.alert = function (content) {
 		fixed: true,
 		lock: true,
 		content: content,
-		ok: true
+		ok: true,
+		close: callback
 	});
 };
 

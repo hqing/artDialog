@@ -1,6 +1,6 @@
 /*!
- * artDialog 4.1.3
- * Date: 2011-11-25 15:46
+ * artDialog 4.1.4
+ * Date: 2011-12-08 1:32
  * http://code.google.com/p/artdialog/
  * (c) 2009-2011 TangBin, http://www.planeArt.cn
  *
@@ -46,8 +46,8 @@ var artDialog = function (config, ok, cancel) {
 	if (typeof elem === 'string') elem = $(elem)[0];
 	config.id = elem && elem[_expando + 'follow'] || config.id || _expando + _count;
 	api = artDialog.list[config.id];
-	if (elem && api) return api.follow(elem).focus();
-	if (api) return api.focus();
+	if (elem && api) return api.follow(elem).zIndex().focus();
+	if (api) return api.zIndex().focus();
 	
 	// 目前主流移动设备对fixed支持不好
 	if (_isMobile) config.fixed = false;
@@ -79,7 +79,7 @@ var artDialog = function (config, ok, cancel) {
 
 artDialog.fn = artDialog.prototype = {
 
-	version: '4.1.3',
+	version: '4.1.4',
 	
 	_init: function (config) {
 		var that = this, DOM,
@@ -110,7 +110,7 @@ artDialog.fn = artDialog.prototype = {
 		? that.follow(config.follow)
 		: that.position(config.left, config.top);
 		
-		that.focus();
+		that.zIndex().focus();
 		config.lock && that.lock();
 		
 		that._addEvent();
@@ -508,8 +508,16 @@ artDialog.fn = artDialog.prototype = {
 	
 	/** 设置焦点 */
 	focus: function () {
-		var elemFocus,
-			that = this,
+		try {
+			var elem = this._focus && this._focus[0] || this.DOM.close[0];
+			elem && elem.focus();
+		} catch (e) {}; // IE对不可见元素设置焦点会报错
+		return this;
+	},
+	
+	/** 置顶对话框 */
+	zIndex: function () {
+		var that = this,
 			DOM = that.DOM,
 			wrap = DOM.wrap,
 			top = artDialog.focus,
@@ -523,14 +531,6 @@ artDialog.fn = artDialog.prototype = {
 		top && top.DOM.wrap.removeClass('aui_state_focus');
 		artDialog.focus = that;
 		wrap.addClass('aui_state_focus');
-		
-		// 添加焦点
-		if (that.config.focus) {
-			try {
-				elemFocus = that._focus && that._focus[0] || DOM.close[0];
-				elemFocus && elemFocus.focus();
-			} catch (e) {}; // IE对不可见元素设置焦点会报错
-		};
 		
 		return that;
 	},
@@ -556,7 +556,7 @@ artDialog.fn = artDialog.prototype = {
 				+ '.clientWidth);height:expression(' + domTxt + '.clientHeight)'
 			: '';
 		
-		that.focus(true);
+		that.zIndex();
 		wrap.addClass('aui_state_lock');
 		
 		lockMaskWrap[0].style.cssText = sizeCss + ';position:fixed;z-index:'
@@ -623,10 +623,11 @@ artDialog.fn = artDialog.prototype = {
 	
 	// 获取元素
 	_getDOM: function () {	
-		var wrap = document.createElement('div');
+		var wrap = document.createElement('div'),
+			body = document.body;
 		wrap.style.cssText = 'position:absolute;left:0;top:0';
 		wrap.innerHTML = this._templates;
-		document.body.appendChild(wrap);
+		body.insertBefore(wrap, body.firstChild);
 		
 		var name, i = 0,
 			DOM = {wrap: $(wrap)},
@@ -845,7 +846,7 @@ artDialog.fn = artDialog.prototype = {
 			that._ie6SelectFix();
 		})
 		.bind('mousedown', function () {
-			that.focus(true);
+			that.zIndex();
 		});
 	},
 	
@@ -1237,5 +1238,5 @@ _$document.bind('mousedown', function (event) {
 	};
 });
 
-})(this.art || this.jQuery);
+})(this.art || this.jQuery && (this.art = jQuery));
 

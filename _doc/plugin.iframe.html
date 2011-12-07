@@ -161,9 +161,9 @@ hljs.initHighlightingOnLoad();
           <th class="separate" colspan="4"><abbrev>基础交互对话框</abbrev></th>
         </tr>
         <tr>
-          <th><a href="#alert">art.dialog.alert(content)</a></th>
+          <th><a href="#alert">art.dialog.alert(content, callback)</a></th>
           <td colspan="3">警告消息 (同时只允许一个alert)<br />
-            参数: 内容</td>
+            参数: 内容, 对话框关闭后的回调函数</td>
         </tr>
         <tr class="odd">
           <th><a href="#confirm">art.dialog.confirm(content, ok, cancel)</a></th>
@@ -393,7 +393,7 @@ art.dialog.open('iframeA.html', null, false);
         </p>
         <h3 id="alert">警告消息[alert]</h3>
         <div id="demoCode01">
-          <pre><code class="javascript">art.dialog.alert('警察叔叔会请你喝茶！');</code></pre>
+          <pre><code class="javascript">art.dialog.alert('警察叔叔会请你喝茶！', function () {alert(0)});</code></pre>
         </div>
         <p class="buttons">
           <button class="runCode" name="demoCode01">运行&raquo;</button>

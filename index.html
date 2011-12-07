@@ -129,12 +129,12 @@ $('#main .test').dialog({content: 'hello world'});</code></pre>
 <p>(最低兼容jquery1.3.2，但框架应用插件需要jquery1.4+运行<a href="#?" title="jQuery版本小于1.4不能获取iframe内部尺寸，导致open方法无法自适应内容尺寸">[?]</a>)</p>
     <h2>联系</h2>
     <p>如果你对artDialog有什么意见建议可以用下面任意一种联系方式找到作者。artDialog一直在不断完善自身，这个愉悦的过程中感谢有你的参与～</p>
-    <p>提交BUG必备项：1、浏览器名称，版本 2、artDialog版本号（只支持4+版本） 3、简明扼要的描述信息 4、建议提取一份BUG DEMO，这样解决问题的概率增加300%</p>
-    <p>如果需要帮助，可以前往由 artDialog 爱好者建立的QQ群： 44030323 </p>
+    <p><strong>提交BUG必备项</strong>：1、浏览器名称，版本 2、artDialog版本号（只支持4+版本） 3、简明扼要的描述信息 4、建议提取一份BUG DEMO，这样解决问题的概率增加300%</p>
+    <p>如果对使用问题有疑惑，可以前往由 artDialog 爱好者建立的QQ群寻求帮助（前提是先自己阅读文档）： 44030323 </p>
     <p>作者：糖饼<br />
-      邮箱：<span id="myEmail"></span> <span style="color:#CCC">(可以用来咨询商业授权与定制版事宜)</span><br />
+      邮箱：<span id="myEmail"></span> <span style="color:#990">(可以用来咨询商业授权与商业定制版事宜)</span><br />
       网站：<a href="http://www.planeart.cn" target="_blank">PlaneArt.Cn</a><br />
-      微博：<a href="http://t.qq.com/tangbin">tangbin</a>(腾讯) <a href="http://www.weibo.com/planeart">planeart</a>(新浪)</p>
+      微博：<a href="http://t.qq.com/tangbin">t.qq.com/tangbin</a></p>
     <h2>捐赠</h2>
     <p>artDialog就是你一直想要的对话框么？哇～那么我非常期待您能够热情的提供15元或者其他金额的捐赠鼓励～正如您支持其他开源项目一样。</p>
     <p><a href="http://www.alipay.com/" target="_blank"><img style="max-height:42px" src="./_doc/images/alipay.jpg" alt="支付宝" align="middle" /></a> 帐号：<span id="alipay"></span></p>
@@ -150,6 +150,18 @@ $('#main .test').dialog({content: 'hello world'});</code></pre>
 	myMail = '<a href="mailto:' + myMail + '">' + myMail + '</a>';
 	document.getElementById('alipay').innerHTML = myMail;
 	document.getElementById('myEmail').innerHTML = myMail;
+	
+	$(function () {
+		art.dialog({
+			left: '100%',
+			top: '100%',
+			title: '欢迎',
+			icon: 'face-smile',
+			content: '若需要商业定制，请联系：<br>' + myMail,
+			width: 200,
+			fixed: true
+		})
+	})
 })();
 </script>
 <script>_isDemoSkin && window._demoSkin && _demoSkin();</script>
