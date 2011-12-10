@@ -15,7 +15,7 @@ var _topDialog, _proxyDialog, _zIndex,
 	_open = '@ARTDIALOG.OPEN',
 	_opener = '@ARTDIALOG.OPENER',
 	_winName = window.name = window.name
-	|| '@ARTDIALOG.WINNAME' + (new Date).getTime(),
+	|| '@ARTDIALOG.WINNAME' + + new Date,
 	_isIE6 = window.VBArray && !window.XMLHttpRequest;
 
 $(function () {
@@ -96,7 +96,8 @@ artDialog.removeData = function (name) {
 artDialog.through = _proxyDialog = function () {
 	var api = _topDialog.apply(this, arguments);
 		
-	// 缓存从当前window（可能为iframe）调出所有跨框架对话框，window卸载后全部关闭这些对话框
+	// 缓存从当前 window（可能为iframe）调出所有跨框架对话框，
+	// 以便让当前 window 卸载前去关闭这些对话框。
 	// 因为iframe注销后也会从内存中删除其创建的对象，这样可以防止回调函数报错
 	if (_top !== window) artDialog.list[api.config.id] = api;
 	return api;
@@ -110,7 +111,7 @@ _top !== window && $(window).bind('unload', function () {
 			config = list[i].config;
 			if (config) config.duration = 0; // 取消动画
 			list[i].close();
-			delete list[i];
+			//delete list[i];
 		};
 	};
 });
@@ -132,7 +133,7 @@ artDialog.open = function (url, options, cache) {
 		loadCss = 'width:100%;height:100%;border:none 0';
 		
 	if (cache === false) {
-		var ts = (new Date()).getTime(),
+		var ts = + new Date,
 			ret = url.replace(/([?&])_=[^&]*/, "$1_=" + ts );
 		url = ret + ((ret === url) ? (/\?/.test(url) ? "&" : "?") + "_=" + ts : "");
 	};

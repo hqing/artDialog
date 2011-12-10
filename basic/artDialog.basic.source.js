@@ -311,7 +311,7 @@ $.removeData = function (elem, name) {
 
 $.uuid = 0;
 $.cache = {};
-$.expando = '@cache' + (new Date).getTime();
+$.expando = '@cache' + + new Date;
 
 // 标记元素唯一身份
 function uuid (elem) {
@@ -532,10 +532,11 @@ var _box,
 	_isMobile = 'createTouch' in document && !('onmousemove' in _elem)
 		|| /(iPhone|iPad|iPod)/i.test(navigator.userAgent),
 	_isFixed = !_isIE6 && !_isMobile,
-	_expando = 'artDialog' + (new Date).getTime();
+	_expando = 'artDialog' + + new Date;
 
 var artDialog = function (config, ok, cancel) {
 	config = config || {};
+	
 	if (typeof config === 'string' || config.nodeType === 1) {
 		config = {content: config, fixed: !_isMobile};
 	};
@@ -824,6 +825,11 @@ artDialog.fn = artDialog.prototype = {
 				that._focus = $(button).addClass(strongButton);
 				that.focus();
 			};
+			
+			// Internet Explorer 的默认类型是 "button"，
+			// 而其他浏览器中（包括 W3C 规范）的默认值是 "submit"
+			// @see http://www.w3school.com.cn/tags/att_button_type.asp
+			button.type = 'button';
 			
 			button[_expando + 'callback'] = name;
 			button.disabled = !!val.disabled;
@@ -1129,7 +1135,7 @@ _$document.bind('keydown', function (event) {
 
 
 /** 模板 */
-// 使用uglifyjs压缩能够预先处理"+"号以合并字符串
+// 使用uglifyjs压缩能够预先处理"+"号合并字符串
 // @see	http://marijnhaverbeke.nl/uglifyjs
 artDialog.fn._templates = 
 '<div class="aui_outer">'

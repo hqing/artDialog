@@ -354,7 +354,7 @@ $.removeData = function (elem, name) {
 
 $.uuid = 0;
 $.cache = {};
-$.expando = '@cache' + (new Date).getTime();
+$.expando = '@cache' + + new Date
 
 // 标记元素唯一身份
 function uuid (elem) {
@@ -662,7 +662,7 @@ $.ajax = function (config) {
 		url = config.url;
 	
 	if (config.cache === false) {
-		var ts = (new Date()).getTime(),
+		var ts = + new Date,
 			ret = url.replace(/([?&])_=[^&]*/, "$1_=" + ts );
 		url = ret + ((ret === url) ? (/\?/.test(url) ? "&" : "?") + "_=" + ts : "");
 	};
@@ -789,7 +789,7 @@ $.fx.prototype = {
 };
 
 $.fx.now = function () {
-    return new Date().getTime();
+    return + new Date;
 };
 
 $.easing = {
@@ -839,15 +839,15 @@ var _box, _thisScript, _skin, _path,
 	_$window = $(window),
 	_$document = $(document),
 	_$html = $('html'),
-	_$body = $(function(){_$body = $('body')}),
 	_elem = document.documentElement,
 	_isIE6 = window.VBArray && !window.XMLHttpRequest,
 	_isMobile = 'createTouch' in document && !('onmousemove' in _elem)
 		|| /(iPhone|iPad|iPod)/i.test(navigator.userAgent),
-	_expando = 'artDialog' + (new Date).getTime();
+	_expando = 'artDialog' + + new Date;
 
 var artDialog = function (config, ok, cancel) {
 	config = config || {};
+	
 	if (typeof config === 'string' || config.nodeType === 1) {
 		config = {content: config, fixed: !_isMobile};
 	};
@@ -1237,6 +1237,11 @@ artDialog.fn = artDialog.prototype = {
 				that.focus();
 			};
 			
+			// Internet Explorer 的默认类型是 "button"，
+			// 而其他浏览器中（包括 W3C 规范）的默认值是 "submit"
+			// @see http://www.w3school.com.cn/tags/att_button_type.asp
+			button.type = 'button';
+			
 			button[_expando + 'callback'] = name;
 			button.disabled = !!val.disabled;
 
@@ -1368,7 +1373,7 @@ artDialog.fn = artDialog.prototype = {
 			config = that.config,
 			docWidth = _$document.width(),
 			docHeight = _$document.height(),
-			lockMaskWrap = that._lockMaskWrap || $(_$body[0].appendChild(document.createElement('div'))),
+			lockMaskWrap = that._lockMaskWrap || $(document.body.appendChild(document.createElement('div'))),
 			lockMask = that._lockMask || $(lockMaskWrap[0].appendChild(document.createElement('div'))),
 			domTxt = '(document).documentElement',
 			sizeCss = _isMobile ? 'width:' + docWidth + 'px;height:' + docHeight
@@ -1557,7 +1562,7 @@ artDialog.fn = artDialog.prototype = {
 	_setFixed: (function () {
 		_isIE6 && $(function () {
 			var bg = 'backgroundAttachment';
-			if (_$html.css(bg) !== 'fixed' && _$body.css(bg) !== 'fixed') {
+			if (_$html.css(bg) !== 'fixed' && $('body').css(bg) !== 'fixed') {
 				_$html.css({
 					zoom: 1,// 避免偶尔出现body背景图片异常的情况
 					backgroundImage: 'url(about:blank)',
@@ -1764,7 +1769,7 @@ try {
 
 
 
-// 使用uglifyjs压缩能够预先处理"+"号以合并字符串
+// 使用uglifyjs压缩能够预先处理"+"号合并字符串
 // uglifyjs: http://marijnhaverbeke.nl/uglifyjs
 artDialog.fn._templates =
 '<div class="aui_outer">'
