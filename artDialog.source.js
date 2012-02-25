@@ -1,8 +1,8 @@
 /*!
- * artDialog 4.1.4
- * Date: 2011-12-08 1:32
+ * artDialog 4.1.5
+ * Date: 2012-02-25 22:12
  * http://code.google.com/p/artdialog/
- * (c) 2009-2011 TangBin, http://www.planeArt.cn
+ * (c) 2009-2012 TangBin, http://www.planeArt.cn
  *
  * This is licensed under the GNU LGPL, version 2.1 or later.
  * For details, see: http://creativecommons.org/licenses/LGPL/2.1/
@@ -902,7 +902,9 @@ var artDialog = function (config, ok, cancel) {
 
 artDialog.fn = artDialog.prototype = {
 
-	version: '4.1.4',
+	version: '4.1.5',
+	
+	closed: false,
 	
 	_init: function (config) {
 		var that = this, DOM,
@@ -910,7 +912,6 @@ artDialog.fn = artDialog.prototype = {
 			iconBg = icon && (_isIE6 ? {png: 'icons/' + icon + '.png'}
 			: {backgroundImage: 'url(\'' + config.path + '/skins/icons/' + icon + '.png\')'});
 		
-		that._isRun = true;
 		that.config = config;
 		that.DOM = DOM = that.DOM || that._getDOM();
 		
@@ -1213,7 +1214,6 @@ artDialog.fn = artDialog.prototype = {
 		var that = this,
 			ags = arguments,
 			DOM = that.DOM,
-			wrap = DOM.wrap,
 			buttons = DOM.buttons,
 			elem = buttons[0],
 			strongButton = 'aui_state_highlight',
@@ -1240,7 +1240,7 @@ artDialog.fn = artDialog.prototype = {
 			// Internet Explorer 的默认类型是 "button"，
 			// 而其他浏览器中（包括 W3C 规范）的默认值是 "submit"
 			// @see http://www.w3school.com.cn/tags/att_button_type.asp
-			button.type = 'button';
+			button.setAttribute('type', 'button');
 			
 			button[_expando + 'callback'] = name;
 			button.disabled = !!val.disabled;
@@ -1274,7 +1274,7 @@ artDialog.fn = artDialog.prototype = {
 	
 	/** 关闭对话框 */
 	close: function () {
-		if (!this._isRun) return this;
+		if (this.closed) return this;
 		
 		var that = this,
 			DOM = that.DOM,
@@ -1454,7 +1454,7 @@ artDialog.fn = artDialog.prototype = {
 		var wrap = document.createElement('div'),
 			body = document.body;
 		wrap.style.cssText = 'position:absolute;left:0;top:0';
-		wrap.innerHTML = this._templates;
+		wrap.innerHTML = artDialog._templates;
 		body.insertBefore(wrap, body.firstChild);
 		
 		var name, i = 0,
@@ -1705,8 +1705,13 @@ $.fn.dialog = $.fn.artDialog = function () {
 artDialog.focus = null;
 
 
+/** 获取某对话框API */
+artDialog.get = function (id) {
+	return id === undefined
+	? artDialog.list
+	: artDialog.list[id];
+};
 
-/** 对话框列表 */
 artDialog.list = {};
 
 
@@ -1771,7 +1776,7 @@ try {
 
 // 使用uglifyjs压缩能够预先处理"+"号合并字符串
 // uglifyjs: http://marijnhaverbeke.nl/uglifyjs
-artDialog.fn._templates =
+artDialog._templates =
 '<div class="aui_outer">'
 +	'<table class="aui_border">'
 +		'<tbody>'
@@ -1883,7 +1888,7 @@ var _dragEvent, _use,
 	_$window = $(window),
 	_$document = $(document),
 	_elem = document.documentElement,
-	_isIE6 = !-[1,] && !('minWidth' in _elem.style),
+	_isIE6 = !('minWidth' in _elem.style),
 	_isLosecapture = 'onlosecapture' in _elem,
 	_isSetCapture = 'setCapture' in _elem;
 
@@ -2017,7 +2022,7 @@ _use = function (event) {
 			_$window.unbind('blur', _dragEvent.end);
 		_isSetCapture && title[0].releaseCapture();
 		
-		_isIE6 && api._isRun && api._autoPositionType();
+		_isIE6 && !api.closed && api._autoPositionType();
 		
 		wrap.removeClass('aui_state_drag');
 	};

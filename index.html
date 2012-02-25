@@ -132,15 +132,15 @@ $('#main .test').dialog({content: 'hello world'});</code></pre>
     <p><strong>提交BUG必备项</strong>：1、浏览器名称，版本 2、artDialog版本号（只支持4+版本） 3、简明扼要的描述信息 4、建议提取一份BUG DEMO，这样解决问题的概率增加300%</p>
     <p>如果对使用问题有疑惑，可以前往由 artDialog 爱好者建立的QQ群寻求帮助（前提是先自己阅读文档）： 44030323 </p>
     <p>作者：糖饼<br />
-      邮箱：<span id="myEmail"></span> <span style="color:#990">(可以用来咨询商业授权与商业定制版事宜)</span><br />
+      邮箱：<span id="myEmail"></span> <span style="color:#990">(仅用作bug提交)</span><br />
       网站：<a href="http://www.planeart.cn" target="_blank">PlaneArt.Cn</a><br />
       微博：<a href="http://t.qq.com/tangbin">t.qq.com/tangbin</a></p>
     <h2>捐赠</h2>
     <p>artDialog就是你一直想要的对话框么？哇～那么我非常期待您能够热情的提供15元或者其他金额的捐赠鼓励～正如您支持其他开源项目一样。</p>
-    <p><a href="http://www.alipay.com/" target="_blank"><img style="max-height:42px" src="./_doc/images/alipay.jpg" alt="支付宝" align="middle" /></a> 帐号：<span id="alipay"></span></p>
+    <p>支付宝: <a href="https://me.alipay.com/planeart" target="_blank">https://me.alipay.com/planeart</a></p>
     <p>您因如果使用artDialog而受益或者感到愉悦，您还可以这样帮助artDialog成长：</p>
     <p> 1、共同参与并完善artDialog或用blog/微博/Twitter把它分享它给更多的人。</p>
-    <p> 2、如artDialog有幸被用在大型项目，请您联系我，我后续将在artDialog主页展示您项目/企业的LOGO（目前有phpCMS、中国电信等企业使用它）。</p>
+    <p> 2、如artDialog有幸被用在你的项目，请您联系我，我后续将在artDialog主页展示您项目/企业的LOGO（目前有盛大phpCMS、腾讯、中国电信等企业使用它）。</p>
   </div>
   <div id="footer"></div>
 </div>
@@ -148,20 +148,9 @@ $('#main .test').dialog({content: 'hello world'});</code></pre>
 (function(){
 	var myMail = 1987 + '.' + 'tangbin' + '@' + 'gmail.com';
 	myMail = '<a href="mailto:' + myMail + '">' + myMail + '</a>';
-	document.getElementById('alipay').innerHTML = myMail;
 	document.getElementById('myEmail').innerHTML = myMail;
 	
-	$(function () {
-		art.dialog({
-			left: '100%',
-			top: '100%',
-			title: '欢迎',
-			icon: 'face-smile',
-			content: '若需要商业定制，请联系：<br>' + myMail,
-			width: 200,
-			fixed: true
-		})
-	})
+
 })();
 </script>
 <script>_isDemoSkin && window._demoSkin && _demoSkin();</script>

@@ -52,7 +52,7 @@ button.aui_state_highlight:active { border-color:#1c6a9e; filter: progid:DXImage
 .aui_state_drag .aui_title { background: linear-gradient(top, #bdc6cd, #edf5f8); background: -moz-linear-gradient(top, #bdc6cd, #edf5f8); background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#bdc6cd), to(#edf5f8)); filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bdc6cd', endColorstr='#edf5f8'); box-shadow:none; }
 .aui_state_drag .aui_titleBar { box-shadow:none; }
 .aui_close { padding:0; top:4px; right:4px; width:21px; height:21px; line-height:21px; font-size:18px; color:#68767b; text-align:center; font-family: Helvetica, STHeiti; _font-family: Tahoma, '\u9ed1\u4f53', 'Book Antiqua', Palatino; text-shadow:0 1px 0 rgba(255, 255, 255, .9); }
-.aui_close:hover { color:#C72015; }
+.aui_close:hover { background:#C72015; color:#FFF; }
 .aui_close:active { box-shadow: none; }
 .aui_content { color:#666; }
 .aui_state_focus .aui_content { color:#000; }
