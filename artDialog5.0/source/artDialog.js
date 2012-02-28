@@ -1,6 +1,6 @@
 /*!
 * artDialog 5
-* Date: 2012-02-26
+* Date: 2012-02-28
 * http://code.google.com/p/artdialog/
 * (c) 2009-2012 TangBin, http://www.planeArt.cn
 *
@@ -564,6 +564,11 @@ return $}(window));
 
 ;(function ($, window, undefined) {
 
+// artDialog 只支持 xhtml 1.0 或者以上的 DOCTYPE 声明
+if (document.compatMode === 'BackCompat') {
+    throw new Error('artDialog: Document types require more than xhtml1.0');
+};
+
 var _singleton,
     _count = 0,
     _expando = 'artDialog' + + new Date,
@@ -658,7 +663,7 @@ var artDialog = function (config, ok, cancel) {
         _singleton.constructor(config) : new artDialog.fn.constructor(config);
 };
 
-artDialog.version = '5.0-preview';
+artDialog.version = '5.0';
 
 artDialog.fn = artDialog.prototype = {
     
@@ -1205,7 +1210,7 @@ artDialog.fn = artDialog.prototype = {
         var body = document.body;
         
         if (!body) {
-            throw new Error('artDialog: Documents not ready!');
+            throw new Error('artDialog: "documents.body" not ready');
         };
         
         var wrap = document.createElement('div');
@@ -1496,6 +1501,7 @@ this.artDialog = $.dialog = $.artDialog = artDialog;
 24. title 方法不支持空参数
 25. content 方法不支持空参数
 26. button 方法的参数不支持数组类型
+27. 判断 DOCTYPE, 对 xhtml1.0 以下的页面报告错误
 
 */
 

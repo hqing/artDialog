@@ -154,12 +154,11 @@ var DragEvent = function () {
     proxy('end');
 };
 
-$.noop = $.noop || function () {}; // < 1.42
 
 DragEvent.prototype = {
 
     // 开始拖拽
-    onstart: $.noop,
+    // onstart: function () {},
     start: function (event) {
         $(document)
         .bind('mousemove', this.move)
@@ -173,7 +172,7 @@ DragEvent.prototype = {
     },
     
     // 正在拖拽
-    onmove: $.noop,
+    // onmove: function () {},
     move: function (event) {		
         this._mClientX = event.clientX;
         this._mClientY = event.clientY;
@@ -186,7 +185,7 @@ DragEvent.prototype = {
     },
     
     // 结束拖拽
-    onend: $.noop,
+    // onend: function () {},
     end: function (event) {
         $(document)
         .unbind('mousemove', this.move)
@@ -203,12 +202,20 @@ var $window = $(window),
     html = document.documentElement,
     isIE6 = !('minWidth' in html.style),
     isLosecapture = 'onlosecapture' in html,
-    isSetCapture = 'setCapture' in html;
+    isSetCapture = 'setCapture' in html,
+    clsSelect = 'getSelection' in window
+    ? function () {
+        window.getSelection().removeAllRanges();
+    }
+    : function () {
+        try {
+            document.selection.empty();
+        } catch (e) {};
+    };
     
 var dragInit = function (event) {
     
-    var dragEvent = new DragEvent;
-    var startWidth, startHeight, startLeft, startTop,
+    var dragEvent = new DragEvent,
         api = artDialog.focus,
         dom = api.dom,
         $wrap = dom.wrap,
@@ -220,34 +227,17 @@ var dragInit = function (event) {
         wrapStyle = wrap.style,
         mainStyle = main.style;
         
+        
     var isResize = event.target === dom.se[0] ? true : false;
     var isFixed = wrap.style.position === 'fixed',
-        ow = wrap.offsetWidth,
-        oh = wrap.offsetHeight,
-        ww = $window.width(),
-        wh = $window.height(),
-        dl = isFixed ? 0 : $document.scrollLeft(),
-        dt = isFixed ? 0 : $document.scrollTop();
+        minX = isFixed ? 0 : $document.scrollLeft(),
+        minY = isFixed ? 0 : $document.scrollTop(),
+        maxX = $window.width() - wrap.offsetWidth + minX,
+        maxY = $window.height() - wrap.offsetHeight + minY;
     
-    var limit =  {
-        minX: dl,
-        minY: dt,
-        maxX: ww - ow + dl,
-        maxY: wh - oh + dt
-    };
-
-        
-    // 清除文本选择
-    var clsSelect = 'getSelection' in window
-    ? function () {
-        window.getSelection().removeAllRanges();
-    }
-    : function () {
-        try {
-            document.selection.empty();
-        } catch (e) {};
-    };
-        
+    
+    var startWidth, startHeight, startLeft, startTop;
+    
     
     // 对话框准备拖动
     dragEvent.onstart = function (x, y) {
@@ -288,8 +278,8 @@ var dragInit = function (event) {
             mainStyle.height = Math.max(0, height) + 'px';
             
         } else {
-            var left = Math.max(limit.minX, Math.min(limit.maxX, x + startLeft)),
-                top = Math.max(limit.minY, Math.min(limit.maxY, y + startTop));
+            var left = Math.max(minX, Math.min(maxX, x + startLeft)),
+                top = Math.max(minY, Math.min(maxY, y + startTop));
 
             wrapStyle.left = left  + 'px';
             wrapStyle.top = top + 'px';
