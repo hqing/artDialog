@@ -121,7 +121,8 @@ artDialog.fn = artDialog.prototype = {
         that.config = config;
         that.dom = dom = that.dom || that._getDom();
         
-        dom.wrap.addClass(config.skin);
+        config.skin && dom.wrap.addClass(config.skin);
+        
         dom.wrap.css('position', config.fixed ? 'fixed' : 'absolute');
         dom.close[config.cancel === false ? 'hide' : 'show']();
         dom.content.css('padding', config.padding);
@@ -867,46 +868,67 @@ artDialog._templates =
  * 默认配置
  */
 artDialog.defaults = {
+
     // 消息内容
     content: '<div class="d-loading"><span>loading..</span></div>',
+    
     // 标题
     title: 'message',
+    
     // 自定义按钮
     button: null,
+    
     // 确定按钮回调函数
     ok: null,
+    
     // 取消按钮回调函数
     cancel: null,
+    
     // 对话框初始化后执行的函数
     initialize: null,
+    
     // 对话框关闭前执行的函数
     beforeunload: null,
+    
     // 确定按钮文本
     okValue: 'ok',
+    
     // 取消按钮文本
     cancelValue: 'cancel',
+    
     // 内容宽度
     width: 'auto',
+    
     // 内容高度
     height: 'auto',
+    
     // 内容与边界填充距离
     padding: '20px 25px',
+    
     // 皮肤名(多皮肤共存预留接口)
-    skin: '',
+    skin: null,
+    
     // 自动关闭时间
     time: null,
+    
     // 是否支持Esc键关闭
     esc: true,
+    
     // 是否支持对话框按钮自动聚焦
     focus: true,
+    
     // 初始化后是否显示对话框
     show: true,
+    
     // 让对话框跟随某元素
     follow: null,
+    
     // 是否锁屏
     lock: false,
+    
     // 是否固定定位
     fixed: false,
+    
     // 对话框叠加高度值(重要：此值不能超过浏览器最大限制)
     zIndex: 1987
     

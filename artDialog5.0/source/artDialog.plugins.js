@@ -1,6 +1,6 @@
 /*!
 * artDialog 5 plugins
-* Date: 2012-02-25
+* Date: 2012-02-29
 * http://code.google.com/p/artdialog/
 * (c) 2009-2012 TangBin, http://www.planeArt.cn
 *
@@ -330,5 +330,5 @@ $(document).bind('mousedown', function (event) {
 });
 
 
-}(this.art || this.jQuery, this));
+}(this.art || this.jQuery));
 

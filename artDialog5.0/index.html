@@ -1109,10 +1109,10 @@ var sh_languages = {};function sh_isEmailAddress(a){return/^mailto:/.test(a)?!1:
 
 sh_highlightDocument();
 
-$('#artVersion')[0].innerHTML = art.dialog.version || '';
+$('#artVersion').html(art.dialog.version || '');
 
 // 运行代码
-$.fn.runCode = function () {
+$.prototype.runCode = function () {
     var getText = function(elems) {
         var ret = "", elem;
 
