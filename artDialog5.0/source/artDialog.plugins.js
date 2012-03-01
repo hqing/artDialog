@@ -1,6 +1,6 @@
 /*!
 * artDialog 5 plugins
-* Date: 2012-02-29
+* Date: 2012-03-01
 * http://code.google.com/p/artdialog/
 * (c) 2009-2012 TangBin, http://www.planeArt.cn
 *
@@ -117,7 +117,7 @@ $.dialog.prototype.shake = (function () {
             if (quantity !== 0) {
                 animate(
                     elem,
-                    quantity === 1 ? 0 : distance / quantity - distance,
+                    quantity === 1 ? 0 : (distance / quantity - distance) * 1.3,
                     duration,
                     -- quantity
                 );
@@ -143,7 +143,7 @@ var DragEvent = function () {
         };
         
     proxy('start');
-    proxy('move');
+    proxy('over');
     proxy('end');
 };
 
@@ -154,7 +154,7 @@ DragEvent.prototype = {
     // onstart: function () {},
     start: function (event) {
         $(document)
-        .bind('mousemove', this.move)
+        .bind('mousemove', this.over)
         .bind('mouseup', this.end);
             
         this._sClientX = event.clientX;
@@ -165,11 +165,11 @@ DragEvent.prototype = {
     },
     
     // 正在拖拽
-    // onmove: function () {},
-    move: function (event) {		
+    // onover: function () {},
+    over: function (event) {		
         this._mClientX = event.clientX;
         this._mClientY = event.clientY;
-        this.onmove(
+        this.onover(
             event.clientX - this._sClientX,
             event.clientY - this._sClientY
         );
@@ -181,7 +181,7 @@ DragEvent.prototype = {
     // onend: function () {},
     end: function (event) {
         $(document)
-        .unbind('mousemove', this.move)
+        .unbind('mousemove', this.over)
         .unbind('mouseup', this.end);
         
         this.onend(event.clientX, event.clientY);
@@ -194,16 +194,10 @@ var $window = $(window),
     $document = $(document),
     html = document.documentElement,
     isIE6 = !('minWidth' in html.style),
-    isLosecapture = 'onlosecapture' in html,
+    isLosecapture = !isIE6 && 'onlosecapture' in html,
     isSetCapture = 'setCapture' in html,
-    clsSelect = 'getSelection' in window
-    ? function () {
-        window.getSelection().removeAllRanges();
-    }
-    : function () {
-        try {
-            document.selection.empty();
-        } catch (e) {};
+    dragstart = function () {
+        return false
     };
     
 var dragInit = function (event) {
@@ -243,9 +237,10 @@ var dragInit = function (event) {
             startTop = wrap.offsetTop;
         };
         
-        $document.bind('dblclick', dragEvent.end);
+        $document.bind('dblclick', dragEvent.end)
+        .bind('dragstart', dragstart);
             
-        if (!isIE6 && isLosecapture) {
+        if (isLosecapture) {
             $title.bind('losecapture', dragEvent.end)
         } else {
             $window.bind('blur', dragEvent.end)
@@ -258,7 +253,7 @@ var dragInit = function (event) {
     };
     
     // 对话框拖动进行中
-    dragEvent.onmove = function (x, y) {
+    dragEvent.onover = function (x, y) {
     
         if (isResize) {
             var width = x + startWidth,
@@ -277,17 +272,17 @@ var dragInit = function (event) {
             wrapStyle.left = left  + 'px';
             wrapStyle.top = top + 'px';
         };
-            
-        clsSelect();
+        
         
     };
     
     // 对话框拖动结束
     dragEvent.onend = function (x, y) {
     
-        $document.unbind('dblclick', dragEvent.end);
+        $document.unbind('dblclick', dragEvent.end)
+        .unbind('dragstart', dragstart);
         
-        if (!isIE6 && isLosecapture) {
+        if (isLosecapture) {
             $title.unbind('losecapture', dragEvent.end);
         } else {
             $window.unbind('blur', dragEvent.end)
