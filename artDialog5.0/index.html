@@ -194,7 +194,7 @@ pre.sh_sourceCode .sh_predef_func { color: #099; font-weight: normal; font-style
               <li><a href="#options-zIndex">zIndex</a></li>
               <li><a href="#options-initialize" class="change">initialize</a></li>
               <li><a href="#options-beforeunload" class="change">beforeunload</a></li>
-              <li><a href="#options-show">show</a></li>
+              <li><a href="#options-visible" class="change">visible</a></li>
               <li><a href="#options-time" class="change">time</a></li>
               <li><a href="#options-esc">esc</a></li>
               <li><a href="#options-focus" class="change">focus</a></li>
@@ -208,8 +208,8 @@ pre.sh_sourceCode .sh_predef_func { color: #099; font-weight: normal; font-style
           <li><a href="#api-get" class="change">art.dialog.get(id)</a></li>
           <li><a href="#api-closed" class="change">closed</a></li>
           <li><a href="#api-close">close()</a></li>
-          <li><a href="#api-show">show()</a></li>
-          <li><a href="#api-hide">hide()</a></li>
+          <li><a href="#api-visible" class="change">visible()</a></li>
+          <li><a href="#api-hidden" class="change">hidden()</a></li>
           <li><a href="#api-title">title(value)</a></li>
           <li><a href="#api-content">content(value)</a></li>
           <li><a href="#api-button">button(button, button, ..)</a></li>
@@ -638,7 +638,7 @@ art.dialog.get('id-demo').title('8888888888');</pre>
         </dl>
       </li>
       <li>
-        <h3 id="options-show">show</h3>
+        <h3 id="options-visible"><span class="change">visible</span></h3>
         <dl>
           <dt>概述</dt>
           <dd>(默认值: true) 是否显示对话框</dd>
@@ -646,13 +646,13 @@ art.dialog.get('id-demo').title('8888888888');</pre>
           <dd>Boolean</dd>
           <dt>示例</dt>
           <dd>
-            <pre id="options-show-demo" class="sh_javascript">var dialog = art.dialog({
-    show: false,
-    id: 'show-demo'
+            <pre id="options-visible-demo" class="sh_javascript">var dialog = art.dialog({
+    visible: false,
+    id: 'visible-demo'
 });
 
-confirm('显示对话框吗') ? dialog.show() : dialog.hide();</pre>
-            <a class="runCode" href="#options-show-demo">运行</a></dd>
+confirm('显示对话框吗') ? dialog.visible() : dialog.hidden();</pre>
+            <a class="runCode" href="#options-visible-demo">运行</a></dd>
         </dl>
       </li>
       <li>
@@ -768,31 +768,31 @@ if (confirm('关闭对话框吗')) {
         </dl>
       </li>
       <li>
-        <h3 id="api-show">show()</h3>
+        <h3 id="api-visible"><span class="change">visible()</span></h3>
         <dl>
           <dt>概述</dt>
           <dd>把隐藏的对话框显示</dd>
           <dt>示例</dt>
           <dd>
-            <pre id="api-show-demo" class="sh_javascript">var dialog = art.dialog({
-    show: false
+            <pre id="api-visible-demo" class="sh_javascript">var dialog = art.dialog({
+    visible: false
 });
 
-dialog.show();</pre>
-            <a class="runCode" href="#api-show-demo">运行</a> </dd>
+dialog.visible();</pre>
+            <a class="runCode" href="#api-visible-demo">运行</a> </dd>
         </dl>
       </li>
       <li>
-        <h3 id="api-hide">hide()</h3>
+        <h3 id="api-hidden"><span class="change">hidden()</span></h3>
         <dl>
           <dt>概述</dt>
           <dd>隐藏对话框</dd>
           <dt>示例</dt>
           <dd>
-            <pre id="api-hide-demo" class="sh_javascript">var dialog = art.dialog();
+            <pre id="api-hidden-demo" class="sh_javascript">var dialog = art.dialog();
 
-dialog.hide();</pre>
-            <a class="runCode" href="#api-hide-demo">运行</a> </dd>
+dialog.hidden();</pre>
+            <a class="runCode" href="#api-hidden-demo">运行</a> </dd>
         </dl>
       </li>
       <li>
@@ -1237,19 +1237,19 @@ var skinDialog = art.dialog({
     content: $('#skins')[0],
     fixed: true,
     initialize: function () {
-        this.hide();
+        this.hidden();
     },
     beforeunload: function () {
-        this.hide();
+        this.hidden();
         return false;
     }
 });
 
 var getDemoStyle = function (skin) {
     $('#artDialog-skin')[0].href = 'skins/' + skin + '.css?' + + new Date;
-    skinDialog.hide();
+    skinDialog.hidden();
     setTimeout(function () {
-        skinDialog.show().position();
+        skinDialog.visible();
         $('#selectSkinValue')[0].innerHTML = skin;
     }, 150);
 };
@@ -1262,10 +1262,11 @@ $('#skins-list').bind('click', function (event) {
         getDemoStyle(skin);
         return false;
     };
+
 });
 
 $('#showSkinDialog').bind('click', function () {
-    skinDialog.show().zIndex();
+    skinDialog.visible().zIndex();
     return false;
 });
 

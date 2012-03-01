@@ -142,7 +142,7 @@ artDialog.fn = artDialog.prototype = {
         config.lock && that.lock();
         
         that._addEvent();
-        that[config.show ? 'show' : 'hide']().focus();
+        that[config.visible ? 'visible' : 'hidden']().focus();
         
         _singleton = null;
         
@@ -416,10 +416,10 @@ artDialog.fn = artDialog.prototype = {
     
     
     /** 显示对话框 */
-    show: function () {
+    visible: function () {
         //this.dom.wrap.show();
         this.dom.wrap.css('visibility', 'visible');
-        this.dom.outer.addClass('d-state-show');
+        this.dom.outer.addClass('d-state-visible');
         
         if (this._isLock) {
             this._lockMask.show();
@@ -430,10 +430,10 @@ artDialog.fn = artDialog.prototype = {
     
     
     /** 隐藏对话框 */
-    hide: function () {
+    hidden: function () {
         //this.dom.wrap.hide();
         this.dom.wrap.css('visibility', 'hidden');
-        this.dom.outer.removeClass('d-state-show');
+        this.dom.outer.removeClass('d-state-visible');
         
         if (this._isLock) {
             this._lockMask.hide();
@@ -512,7 +512,7 @@ artDialog.fn = artDialog.prototype = {
                 };
             };
             
-            that.hide();
+            that.hidden();
             
         };
         
@@ -918,7 +918,7 @@ artDialog.defaults = {
     focus: true,
     
     // 初始化后是否显示对话框
-    show: true,
+    visible: true,
     
     // 让对话框跟随某元素
     follow: null,
@@ -952,8 +952,8 @@ this.artDialog = $.dialog = $.artDialog = artDialog;
 7.  init 参数更名为 initialize
 8.  title 参数默认值由 '消息' 改为 'message'
 9.  time 参数与方法参数单位由秒改为毫秒
-10. hide 方法改为 visibility:hidden 隐藏，避免居中不准确
-11. 内部为皮肤增加动态样式 d-state-show 类
+10. hide 参数方法更名为 hidden
+11. 内部为皮肤增加动态样式 d-state-visible 类
 12. 给遮罩增添样式 d-mask 类
 13. background 参数被取消, 由 CSS 文件定义
 14. opacity 参数被取消, 由 CSS 文件定义
@@ -970,6 +970,8 @@ this.artDialog = $.dialog = $.artDialog = artDialog;
 25. content 方法不支持空参数
 26. button 方法的参数不支持数组类型
 27. 判断 DOCTYPE, 对 xhtml1.0 以下的页面报告错误
+28. 修复 IE8 动态等新内容时没有撑开对话框高度，特意为 ie8 取消 .d-content { display:inline-block }
+29. show 参数与方法更名为 visible
 
 */
 
