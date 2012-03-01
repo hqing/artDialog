@@ -65,7 +65,7 @@ body { _margin:0; _height:100%; }/*IE6 BUG*/
 	.d-state-drag { box-shadow:none!important; }
 	.d-close { right:-16px; top:-16px; }
 	.d-outer { -webkit-transform: scale(0); transform: scale(0); -webkit-transition: -webkit-box-shadow .2s ease-in-out, -webkit-transform .2s ease-in-out; transition: box-shadow .2s ease-in-out, transform .2s ease-in-out; }
-	.d-state-show { -webkit-transform: scale(1); transform: scale(1); }
+	.d-state-visible { -webkit-transform: scale(1); transform: scale(1); }
 }
 @media screen and (-webkit-min-device-pixel-ratio:0) {/* apple | webkit */
 	.d-close { right:auto; left:-16px; top:-16px; }

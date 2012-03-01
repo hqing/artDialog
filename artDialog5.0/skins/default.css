@@ -69,5 +69,5 @@ body { _margin:0; _height:100%; }/*IE6 BUG*/
 	.d-close { border-radius:5px; }
 	.d-close:hover { box-shadow: 0 1px 0 rgba(255, 255, 255, .4); }
 	.d-outer { -webkit-transform: scale(0); transform: scale(0); -webkit-transition: -webkit-box-shadow .2s ease-in-out, -webkit-transform .2s ease-in-out; transition: box-shadow .2s ease-in-out, transform .2s ease-in-out; }
-	.d-state-show { -webkit-transform: scale(1); transform: scale(1); }
+	.d-state-visible { -webkit-transform: scale(1); transform: scale(1); }
 }

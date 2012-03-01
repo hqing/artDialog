@@ -85,7 +85,7 @@ $.prompt = function (content, ok, defaultValue) {
 /** 抖动效果 */
 $.dialog.prototype.shake = (function () {
 
-    var fx = function (ontween, onend, duration, easing) {
+    var fx = function (ontween, onend, duration) {
         var startTime = + new Date;
         var timer = setInterval(function () {
             var runTime = + new Date - startTime;
@@ -95,11 +95,7 @@ $.dialog.prototype.shake = (function () {
                 clearInterval(timer);
                 onend(pre);
             } else {
-                ontween(
-                    easing
-                    ? easing(pre, runTime, 0, 1, duration)
-                    : pre
-                   );
+                ontween(pre);
             };
         }, 13);
     };
@@ -108,7 +104,7 @@ $.dialog.prototype.shake = (function () {
         var quantity = arguments[3];
 
         if (quantity === undefined) {
-            quantity = 12;
+            quantity = 6;
             duration = duration / quantity;
         };
         
@@ -126,14 +122,11 @@ $.dialog.prototype.shake = (function () {
                     -- quantity
                 );
             };
-        }, duration, function (x, t, b, c, d) {
-            if ((t/=d/2) < 1) return c/2*t*t + b;
-            return -c/2 * ((--t)*(t-2) - 1) + b;
-        });
+        }, duration);
     };
     
     return function () {
-        animate(this.dom.wrap[0], 20, 600);
+        animate(this.dom.wrap[0], 40, 600);
         return this;
     };
 })();
