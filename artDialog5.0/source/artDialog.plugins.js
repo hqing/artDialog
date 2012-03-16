@@ -1,6 +1,6 @@
 /*!
 * artDialog 5 plugins
-* Date: 2012-03-01
+* Date: 2012-03-16
 * http://code.google.com/p/artdialog/
 * (c) 2009-2012 TangBin, http://www.planeArt.cn
 *
@@ -15,7 +15,7 @@
  * @param   {String, HTMLElement}   消息内容
  * @param   {Function}              (可选) 回调函数
  */
-$.alert = function (content, callback) {
+$.alert = $.dialog.alert = function (content, callback) {
     return $.dialog({
         id: 'Alert',
         fixed: true,
@@ -33,7 +33,7 @@ $.alert = function (content, callback) {
  * @param   {Function}              确定按钮回调函数
  * @param   {Function}              取消按钮回调函数
  */
-$.confirm = function (content, ok, cancel) {
+$.confirm = $.dialog.confirm = function (content, ok, cancel) {
     return $.dialog({
         id: 'Confirm',
         fixed: true,
@@ -51,7 +51,7 @@ $.confirm = function (content, ok, cancel) {
  * @param   {Function}              确定按钮回调函数。函数第一个参数接收用户录入的数据
  * @param   {String}                输入框默认文本
  */
-$.prompt = function (content, ok, defaultValue) {
+$.prompt = $.dialog.prompt = function (content, ok, defaultValue) {
     defaultValue = defaultValue || '';
     var input;
     
